@@ -192,13 +192,17 @@ export const AltarCanvas: React.FC<AltarCanvasProps> = ({
                     <div className="absolute -inset-4 rounded-full bg-[#f59e0b]/20 blur-xl group-hover:bg-[#f59e0b]/35 transition-all duration-700"></div>
 
                     {/* Handcrafted Baroque Arched Portrait Frame */}
-                    <div className="relative w-64 h-80 sm:w-72 sm:h-88 rounded-t-[100px] rounded-b-2xl p-3 bg-gradient-to-b from-[#ffc174] via-[#f59e0b] to-[#be0062]/60 shadow-[0_20px_60px_rgba(0,0,0,0.85)] border border-[#ffc174]/50 transition-transform duration-500 group-hover:-translate-y-1">
+                    <div 
+                      style={{ width: '270px', height: '340px' }}
+                      className="relative rounded-t-[100px] rounded-b-2xl p-3 bg-gradient-to-b from-[#ffc174] via-[#f59e0b] to-[#be0062]/60 shadow-[0_20px_60px_rgba(0,0,0,0.85)] border border-[#ffc174]/50 transition-transform duration-500 group-hover:-translate-y-1"
+                    >
                       {/* Inner Velvet Matting */}
                       <div className="w-full h-full rounded-t-[90px] rounded-b-xl overflow-hidden bg-[#110b1b] relative flex flex-col border border-black/80">
                         <img 
                           src={primaryAncestor.photoUrl} 
                           alt={primaryAncestor.name}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-95 contrast-105"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          className="transition-transform duration-700 group-hover:scale-105 filter brightness-95 contrast-105"
                         />
 
                         {/* Scrim with Ancestor Name */}

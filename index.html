@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html class="dark" lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕯️</text></svg>" />
@@ -10,9 +10,44 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..700;1,400&family=Cinzel:wght@600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ffc174",
+              "primary-container": "#f59e0b",
+              "secondary": "#ffb1c7",
+              "secondary-container": "#be0062",
+              "tertiary": "#e4bfff",
+              "tertiary-container": "#d29aff",
+              "background": "#161020",
+              "surface": "#161020",
+              "surface-dim": "#161020",
+              "surface-bright": "#3d3648",
+              "surface-container-lowest": "#110b1b",
+              "surface-container-low": "#1f1929",
+              "surface-container": "#231d2d",
+              "surface-container-high": "#2e2738",
+              "surface-container-highest": "#393243",
+              "on-surface": "#eadef6",
+              "on-surface-variant": "#d8c3ad",
+              "outline": "#a08e7a",
+              "outline-variant": "#534434"
+            },
+            fontFamily: {
+              "serif": ["Playfair Display", "Georgia", "serif"],
+              "sans": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+            }
+          }
+        }
+      };
+    </script>
     <title>Ofrenda Digital — Private Memorial & Gemma AI Sanctuary</title>
   </head>
-  <body>
+  <body class="bg-[#161020] text-[#fcf9f2] min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
