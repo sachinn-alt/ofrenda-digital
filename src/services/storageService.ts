@@ -1,30 +1,30 @@
 import { MemorialProfile, AltarOffering, CandleState, MemoryCapsule, GemmaConfig } from '../types'
 
-const MEMORIALS_KEY = 'ofrenda_memorials_v1'
-const OFFERINGS_KEY = 'ofrenda_offerings_v1'
-const CANDLES_KEY = 'ofrenda_candles_v1'
-const GEMMA_CONFIG_KEY = 'ofrenda_gemma_config_v1'
+const MEMORIALS_KEY = 'ofrenda_memorials_v2'
+const OFFERINGS_KEY = 'ofrenda_offerings_v2'
+const CANDLES_KEY = 'ofrenda_candles_v2'
+const GEMMA_CONFIG_KEY = 'ofrenda_gemma_config_v2'
 
 const DEFAULT_MEMORIALS: MemorialProfile[] = [
   {
     id: 'mem-rosa-1',
     name: 'Rosa Martínez Delgado',
-    relation: 'Abuela (Grandmother)',
+    relation: 'Grandmother (Abuela)',
     birthYear: '1934',
     passingYear: '2022',
     photoUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80',
-    epitaph: 'Matriarch of the yellow kitchen, teller of ghost legends, and protector of family recipes.',
-    favoriteFoods: ['Mole Poblano', 'Pan de Yema con Chocolate', 'Tamales de Dulce'],
+    epitaph: 'Matriarch of the yellow kitchen, teller of folk legends, and protector of family recipes.',
+    favoriteFoods: ['Mole Poblano', 'Sweet Pan Dulce', 'Hot Spiced Chocolate'],
     favoriteSongs: ['Amor Eterno', 'La Llorona', 'Cielito Lindo'],
-    favoriteSaying: 'Donde comen dos, comen tres — siempre hay un plato para quien llegue con hambre.',
+    favoriteSaying: 'Where two can eat, three can eat — there is always a plate for whoever arrives hungry.',
     hobbies: ['Embroidering floral tablecloths', 'Tending to potted begonias', 'Singing boleros at dawn'],
-    calaverita: `Llegó la Flaca cantando un son,\nbuscando a Rosita y su buen sazón.\nMas doña Rosa le dio un tamal,\ny la Muerte bailó hasta el camposanto real.`,
-    remembranceLetter: `Querida Abuela Rosa,\n\nTonight the scent of copal and cempasúchil fills the evening air, just as it did when you guided our little hands to arrange the marigold petals. We made the mole just as you taught us — three kinds of dried chiles, toasted sesame, and that generous block of bittersweet chocolate.\n\nYour laughter still echoes in the courtyard every time the wind stirs the windchimes. Thank you for teaching us that love does not end with the heartbeat; it transforms into the warm memories that guide our lives.\n\nSiempre en nuestros corazones.`,
+    calaverita: `Death came walking through the door,\nlooking for Rosa and dishes of lore.\n"Sit down first and share our feast," Rosa smiled,\nand even Death danced, gentle and mild!`,
+    remembranceLetter: `Dear Grandmother Rosa,\n\nTonight the warm light of candles and marigolds fills the quiet room, just as it did when you guided our little hands as children. We prepared your favorite dishes with love, letting the scent of toasted chiles and bittersweet chocolate drift into the evening.\n\nYour laughter still echoes in the courtyard whenever the wind stirs the chimes. You taught us that love never ends with a heartbeat; it transforms into the warm memories that guide our lives.\n\nForever in our hearts.`,
     oralMemories: [
       {
         id: 'oral-1',
         promptTopic: 'Her morning ritual & laughter',
-        rawTranscript: 'Every morning at 5:30 AM before anyone woke up, you would hear the rhythmic clinking of the molinillo frothing the hot chocolate in her copper pot. If you snuck downstairs, she would never scold you; she would smile with warm crinkles around her dark eyes, hand you a sweet piece of pan dulce, and say "El que madruga, Dios lo bendice, pero el que comparte, Dios lo acompaña."',
+        rawTranscript: 'Every morning at 5:30 AM before anyone woke up, you would hear the rhythmic clinking of the wooden molinillo frothing the hot chocolate in her copper pot. If you snuck downstairs, she would never scold you; she would smile with warm crinkles around her eyes, hand you a sweet piece of pan dulce, and say "He who wakes early is blessed, but he who shares is accompanied by grace."',
         synthesizedStory: 'At the tender break of dawn, Rosa was the quiet sun of the house. The rhythmic dance of her wooden molinillo in simmering chocolate was the heartbeat of waking mornings. Her kitchen was an open sanctuary where no early riser was turned away without warm bread, wisdom, and an embrace that smelled of cinnamon.',
         recordedAt: '2026-10-25'
       }
@@ -36,17 +36,17 @@ const DEFAULT_MEMORIALS: MemorialProfile[] = [
   {
     id: 'mem-mateo-2',
     name: 'Don Mateo Valenzuela',
-    relation: 'Abuelo & Musician',
+    relation: 'Grandfather & Musician',
     birthYear: '1929',
     passingYear: '2019',
     photoUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80',
-    epitaph: 'Master luthier, player of the six-string guitar, and keeper of the town serenatas.',
-    favoriteFoods: ['Café de Olla con Canela', 'Barbacoa de Borrego', 'Dulce de Calabaza'],
+    epitaph: 'Master luthier, player of the six-string guitar, and keeper of twilight serenatas.',
+    favoriteFoods: ['Clay Pot Spiced Coffee', 'Slow-Roasted Barbacoa', 'Caramelized Pumpkin'],
     favoriteSongs: ['El Jinete', 'Sabor a Mí', 'La Bikina'],
-    favoriteSaying: 'La guitarra no llora por tristeza, hijo; llora porque siente la belleza del mundo.',
+    favoriteSaying: 'The guitar does not weep from sadness, my child; it weeps because it feels the beauty of the world.',
     hobbies: ['Carving cedar guitars', 'Playing evening serenatas', 'Stargazing on the roof'],
-    calaverita: `Don Mateo templaba su guitarra fiel,\ncuando la Huesuda le tocó la piel.\n"Toca otra zamba," la Calaca imploró,\ny hasta el Mictlán la fiesta se llevó.`,
-    remembranceLetter: `Don Mateo,\n\nYour old cedar guitar stands tuned by the altar. We still remember your calloused fingers running over the frets, coaxing warmth from cold wood. You taught us that music is the only language that can cross between the world of the living and the world of spirits without needing a translation.\n\nRest in melody and peace.`,
+    calaverita: `Don Mateo tuned his cedar guitar,\nsending sweet chords to the evening star.\nDeath paused to listen, enchanted and still,\njoining the song on the moonlit hill!`,
+    remembranceLetter: `Dear Don Mateo,\n\nYour old cedar guitar stands tuned by the altar. We still remember your calloused fingers running over the frets, coaxing warmth from cold wood on the porch as the stars came out over the hills.\n\nYou taught us that music is the only language that can cross between the living and the departed without needing a translation. May your melody play on in peace.\n\nRest in melody and peace.`,
     oralMemories: [
       {
         id: 'oral-2',
@@ -67,8 +67,8 @@ const DEFAULT_OFFERINGS: AltarOffering[] = [
     id: 'off-1',
     type: 'cempasuchil',
     tier: 1,
-    name: 'Marigold Arc (Cempasúchil)',
-    symbolicMeaning: 'The vibrant golden color and scent guide departed souls back along the path.',
+    name: 'Marigold Flowers (Cempasúchil)',
+    symbolicMeaning: 'The vibrant golden color and sweet scent guide departed souls back along the path.',
     customNote: 'Gathered fresh for the altar',
     xPosPercent: 20
   },
@@ -78,7 +78,7 @@ const DEFAULT_OFFERINGS: AltarOffering[] = [
     tier: 1,
     name: 'Copal Incense Burner',
     symbolicMeaning: 'Purifies the sacred space and carries our prayers upward with fragrant resin smoke.',
-    customNote: 'Resina de copal blanco',
+    customNote: 'Aromatic copal resin',
     xPosPercent: 50
   },
   {
@@ -86,7 +86,7 @@ const DEFAULT_OFFERINGS: AltarOffering[] = [
     type: 'water_salt',
     tier: 1,
     name: 'Vessel of Water & Sacred Salt',
-    symbolicMeaning: 'Water quenches the soul’s thirst after the long journey from Mictlán; salt preserves the spirit.',
+    symbolicMeaning: 'Water quenches the soul’s thirst after the long journey; salt purifies and preserves the spirit.',
     customNote: 'Pure spring water and sea salt',
     xPosPercent: 80
   },
@@ -94,8 +94,8 @@ const DEFAULT_OFFERINGS: AltarOffering[] = [
     id: 'off-4',
     type: 'pan_de_muerto',
     tier: 2,
-    name: 'Pan de Muerto con Azúcar',
-    symbolicMeaning: 'Round sweet bread with bone-shaped cross crusts, representing the cycle of life and death.',
+    name: 'Pan de Muerto (Sacred Bread)',
+    symbolicMeaning: 'Traditional sweet bread with bone-shaped cross crusts, representing the cycle of life.',
     customNote: 'Freshly baked with orange blossom water',
     xPosPercent: 25
   },
@@ -104,7 +104,7 @@ const DEFAULT_OFFERINGS: AltarOffering[] = [
     type: 'guitar',
     tier: 2,
     name: 'Acoustic Guitar',
-    symbolicMeaning: 'Personal token of favorite music and joy shared during life.',
+    symbolicMeaning: 'Personal token of favorite music, serenatas, and joy shared during life.',
     customNote: 'For Don Mateo’s favorite boleros',
     xPosPercent: 75
   },
@@ -112,8 +112,8 @@ const DEFAULT_OFFERINGS: AltarOffering[] = [
     id: 'off-6',
     type: 'calavera',
     tier: 3,
-    name: 'Calaveras de Azúcar',
-    symbolicMeaning: 'Sugar skulls decorated with bright foil and smile, reminding us that death is not bitter.',
+    name: 'Sugar Skulls (Calaveras)',
+    symbolicMeaning: 'Decorated sugar skulls with bright icing, reminding us that death is sweet and natural.',
     customNote: 'With family names inscribed in icing',
     xPosPercent: 30
   },
@@ -121,9 +121,9 @@ const DEFAULT_OFFERINGS: AltarOffering[] = [
     id: 'off-7',
     type: 'coffee',
     tier: 3,
-    name: 'Café de Olla con Canela',
-    symbolicMeaning: 'Clay pot coffee steeped with raw piloncillo and Mexican cinnamon.',
-    customNote: 'Hot and steaming for morning visits',
+    name: 'Clay Pot Spiced Coffee',
+    symbolicMeaning: 'Traditional coffee steeped with raw cane piloncillo and cinnamon.',
+    customNote: 'Hot and steaming for visiting souls',
     xPosPercent: 70
   }
 ]

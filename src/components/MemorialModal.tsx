@@ -574,10 +574,10 @@ export const MemorialModal: React.FC<MemorialModalProps> = ({
                 }}
               >
                 <h4 style={{ color: '#ff4081', fontSize: '0.96rem', marginBottom: 4 }}>
-                  💀 Calaverita Literaria Tradicional
+                  💀 Calaverita Literaria (Memorial Verse)
                 </h4>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem' }}>
-                  Mexican poetic verse written for Día de los Muertos. Humorous and affectionate rhymes where Death visits the living and departed, celebrating their humor and favorite dishes.
+                  Traditional rhyming verses written for Día de los Muertos. Humorous and affectionate stanzas where Death visits the living and departed, celebrating their passions and joy in life.
                 </p>
               </div>
 
@@ -634,7 +634,7 @@ export const MemorialModal: React.FC<MemorialModalProps> = ({
                 }}
               >
                 <h4 style={{ color: 'var(--text-gold)', fontSize: '0.96rem', marginBottom: 4 }}>
-                  📜 Carta del Recuerdo para el Altar
+                  📜 Altar Remembrance Letter
                 </h4>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem' }}>
                   A formal, poetic eulogy letter written to be placed beside their photograph and candles on November 1st and 2nd.

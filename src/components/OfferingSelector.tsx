@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { AltarOffering, OfferingType } from '../types'
-import { X, Plus, Sparkles } from 'lucide-react'
+import { X, Plus } from 'lucide-react'
 import { soundService } from '../services/soundService'
 
 interface OfferingSelectorProps {
@@ -25,63 +25,63 @@ export const OfferingSelector: React.FC<OfferingSelectorProps> = ({
   const options: OfferingOption[] = [
     {
       type: 'cempasuchil',
-      name: 'Flores de Cempasúchil',
+      name: 'Marigold Flowers (Cempasúchil)',
       icon: '🏵️',
-      meaning: 'Vibrant Aztec marigolds whose fiery petals and sweet scent guide spirits from the afterlife.',
+      meaning: 'Vibrant golden marigolds whose fiery petals and sweet scent guide spirits home from the afterlife.',
       recommendedTier: 1
     },
     {
       type: 'copal',
-      name: 'Resina de Copal',
+      name: 'Copal Incense Burner',
       icon: '🏺',
       meaning: 'Sacred aromatic tree resin burned to purify the altar and transmit prayers to the heavens.',
       recommendedTier: 1
     },
     {
       type: 'water_salt',
-      name: 'Vaso de Agua y Sal',
+      name: 'Vessel of Water & Sacred Salt',
       icon: '🍶',
       meaning: 'Water quenches the weary soul after their long travel; salt purifies and preserves their essence.',
       recommendedTier: 1
     },
     {
       type: 'pan_de_muerto',
-      name: 'Pan de Muerto Tradicional',
+      name: 'Pan de Muerto (Sacred Bread)',
       icon: '🍞',
-      meaning: 'Sweet round brioche bread adorned with bone and tear-drop crusts, celebrating the wheel of life.',
+      meaning: 'Traditional sweet brioche bread adorned with bone and tear-drop crusts, celebrating the cycle of life.',
       recommendedTier: 2
     },
     {
       type: 'coffee',
-      name: 'Café de Olla con Canela',
+      name: 'Clay Pot Spiced Coffee',
       icon: '☕',
-      meaning: 'Earthenware clay pot coffee brewed with dark piloncillo and cinnamon to warm the visiting spirit.',
+      meaning: 'Earthenware clay pot coffee brewed with dark cane piloncillo and cinnamon to warm the visiting spirit.',
       recommendedTier: 2
     },
     {
       type: 'guitar',
-      name: 'Guitarra Acústica',
+      name: 'Acoustic Guitar',
       icon: '🎸',
       meaning: 'Honoring the music, serenatas, and songs that filled home courtyards and family reunions.',
       recommendedTier: 2
     },
     {
       type: 'chocolate',
-      name: 'Chocolate de Metate',
+      name: 'Stone-Ground Chocolate',
       icon: '🍫',
-      meaning: 'Stone-ground bitter chocolate frothed with a wooden molinillo in warm milk.',
+      meaning: 'Traditional bitter chocolate frothed with a wooden molinillo in warm milk.',
       recommendedTier: 2
     },
     {
       type: 'book',
-      name: 'Libro de Poesía o Recetas',
+      name: 'Poetry & Recipe Book',
       icon: '📖',
-      meaning: 'Personal keepsake of wisdom, literature, or secret family cooking secrets passed down generations.',
+      meaning: 'Personal keepsake of wisdom, literature, or secret family cooking recipes passed down generations.',
       recommendedTier: 2
     },
     {
       type: 'calavera',
-      name: 'Calaveras de Azúcar',
+      name: 'Sugar Skulls (Calaveras)',
       icon: '💀',
       meaning: 'Colorfully decorated sugar skulls inscribed with names, reminding us that death is sweet and natural.',
       recommendedTier: 3
@@ -218,9 +218,9 @@ export const OfferingSelector: React.FC<OfferingSelectorProps> = ({
                 fontFamily: 'inherit'
               }}
             >
-              <option value={1}>Tier 1: El Cielo (Top - Spiritual realm)</option>
-              <option value={2}>Tier 2: La Tierra (Middle - Earthly delights)</option>
-              <option value={3}>Tier 3: El Inframundo (Bottom - Mictlán foundation)</option>
+              <option value={1}>Tier 1: The Heavens (Top - Spiritual realm)</option>
+              <option value={2}>Tier 2: The Earth (Middle - Earthly delights)</option>
+              <option value={3}>Tier 3: The Roots (Bottom - Mictlán foundation)</option>
             </select>
           </div>
 
@@ -233,7 +233,7 @@ export const OfferingSelector: React.FC<OfferingSelectorProps> = ({
               type="text"
               value={customNote}
               onChange={e => setCustomNote(e.target.value)}
-              placeholder="e.g., Prepared fresh for Abuela Rosa"
+              placeholder="e.g., Prepared fresh with love"
               style={{
                 width: '100%',
                 padding: '9px 12px',

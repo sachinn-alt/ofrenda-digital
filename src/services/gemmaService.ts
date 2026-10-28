@@ -78,14 +78,14 @@ class GemmaService {
     }
   }
 
-  // 1. Generate traditional Calaverita Literaria (satirical & affectionate verse)
+  // 1. Generate traditional Calaverita Literaria (satirical & affectionate verse in English)
   public async generateCalaverita(memorial: MemorialProfile): Promise<GenerateResponse> {
     const systemPrompt = `You are Gemma 2, an open-weight empathetic AI honoring Día de los Muertos traditions.
-Write a traditional Mexican "Calaverita Literaria" in Spanish.
+Write a traditional "Calaverita Literaria" (Day of the Dead memorial poem) in English.
 Rules:
-- 2 to 4 rhyming stanzas (quartets).
-- Humorous, warm, respectful, and celebrating the person's quirks, favorite foods, and hobbies.
-- Feature "La Calaca" / "La Flaca" / "La Muerte" visiting them in a friendly, witty way.`
+- 2 to 3 rhyming stanzas (quartets with AABB or ABAB rhyme scheme).
+- Humorous, warm, respectful, celebrating the person's quirks, favorite foods, and hobbies.
+- Feature "La Catrina" / "Death" visiting them in a gentle, celebratory dialogue.`
 
     const userPrompt = `Person to honor: ${memorial.name} (${memorial.relation})
 Epitaph: ${memorial.epitaph}
@@ -96,15 +96,15 @@ Favorite Saying: "${memorial.favoriteSaying}"`
     const response = await this.executePrompt(systemPrompt, userPrompt)
     if (response.text) return response
 
-    // High quality offline sanctuary generator
-    const food = memorial.favoriteFoods[0] || 'un rico mole'
-    const hobby = memorial.hobbies[0] || 'sus viejos caminos'
-    const song = memorial.favoriteSongs[0] || 'su canción favorita'
+    // High quality offline sanctuary generator in English
+    const food = memorial.favoriteFoods[0] || 'sweet spiced bread'
+    const hobby = memorial.hobbies[0] || 'quiet morning walks'
+    const song = memorial.favoriteSongs[0] || 'their favorite melody'
 
     const offlineVerses = [
-      `Estaba la Muerte rondando el portal,\nbuscando el aroma de ${food.toLowerCase()}.\n"A ${memorial.name} vengo a visitar,\nque tiene la risa más dulce y leal."`,
-      `"¡Espérate, Flaca!", le dijo con calma,\n"primero comamos con toda la fe."\nLe dio un buen bocado que alegra las almas,\ny hasta la Catrina pidió más café.`,
-      `Al son de "${song}" partieron cantando,\ncruzando el camino de flor cempasúchil.\nEn Mictlán alegre se fueron bailando,\npues ${memorial.name.split(' ')[0]} no muere: ¡nos cuida en el cielo!`
+      `Death came strolling through the door,\nsmelling ${food.toLowerCase()} and asking for more.\n"To visit ${memorial.name} I have arrived,\nwhose laughter and kindness kept spirits alive!"`,
+      `"Sit down first, Catrina, and take a seat,\nshare our warm table and have something to eat!"\nThey shared a sweet plate and a bowl of warm tea,\nand even the skeleton laughed with glee.`,
+      `To the sound of "${song}" they danced through the night,\nalong the marigold petals glowing bright.\nFor ${memorial.name.split(' ')[0]} never truly left our side:\ntheir love and their memory remain our guide!`
     ].join('\n\n')
 
     return {
@@ -121,7 +121,7 @@ Favorite Saying: "${memorial.favoriteSaying}"`
     memorialName: string
   ): Promise<GenerateResponse> {
     const systemPrompt = `You are Gemma, an open-source oral historian. 
-Your task is to transform a spoken, conversational memory snippet into a timeless, literary biographical paragraph that captures the warmth, atmosphere, and essence of the person being remembered. Preserve their exact quotes and authentic details.`
+Your task is to transform a spoken, conversational memory snippet into a timeless, literary biographical paragraph in English that captures the warmth, atmosphere, and essence of the person being remembered. Preserve their exact quotes and authentic details.`
 
     const userPrompt = `Deceased ancestor: ${memorialName}
 Memory Topic: ${topic}
@@ -130,7 +130,7 @@ Raw Spoken Memory Transcript: "${rawTranscript}"`
     const response = await this.executePrompt(systemPrompt, userPrompt)
     if (response.text) return response
 
-    // Offline sanctuary synthesis
+    // Offline sanctuary synthesis in English
     const trimmed = rawTranscript.trim()
     const cleanQuotes = trimmed.replace(/\s+/g, ' ')
     const synthesized = `There are moments in a lifetime that never fade, and for ${memorialName}, this memory of ${topic.toLowerCase()} remains etched in time. In the storyteller's own words: "${cleanQuotes}". Through this recollection, their genuine warmth, unique rhythm of life, and enduring spirit remain luminous and alive on this altar.`
@@ -142,9 +142,9 @@ Raw Spoken Memory Transcript: "${rawTranscript}"`
     }
   }
 
-  // 3. Generate a solemn, heartfelt Remembrance Letter (Eulogy) for the altar
+  // 3. Generate a solemn, heartfelt Remembrance Letter (Eulogy) for the altar in English
   public async generateRemembranceLetter(memorial: MemorialProfile): Promise<GenerateResponse> {
-    const systemPrompt = `You are Gemma, crafting a solemn, heartfelt Día de los Muertos letter to be placed on a home ofrenda.
+    const systemPrompt = `You are Gemma, crafting a solemn, heartfelt Día de los Muertos remembrance letter in English to be placed on a home ofrenda.
 Reflect on their legacy, favorite tastes, and how their presence continues to shelter the living.`
 
     const userPrompt = `Name: ${memorial.name}
@@ -157,14 +157,14 @@ Foods on Altar: ${memorial.favoriteFoods.join(', ')}`
     const response = await this.executePrompt(systemPrompt, userPrompt)
     if (response.text) return response
 
-    const letter = `Para nuestro querido(a) ${memorial.name},\n\n` +
-      `Hoy que la frontera entre el tiempo y el recuerdo se desvanece, encendemos estas velas doradas en tu honor. ` +
-      `Colocamos en el altar aquello que tanto amabas: ${memorial.favoriteFoods.slice(0, 2).join(' y ')}, ` +
-      `mientras los pétalos de cempasúchil trazan un puente de luz desde el Mictlán hasta nuestra mesa.\n\n` +
-      `Aún recordamos tus sabias palabras: "${memorial.favoriteSaying}". ` +
-      `Aunque tus pasos ya no resuenen en nuestros pasillos, tu memoria es la llama que nunca se apaga en nuestra casa. ` +
-      `Gracias por la vida que nos diste, por tu risa y por las historias que hoy tus hijos y nietos contamos con orgullo.\n\n` +
-      `Descansa en paz en este día de fiesta. Estás y siempre estarás presente.`
+    const letter = `To our beloved ${memorial.name},\n\n` +
+      `Tonight, as the boundary between time and remembrance softens, we light these golden candles in your honor. ` +
+      `We have placed upon the altar the things you loved most: ${memorial.favoriteFoods.slice(0, 2).join(' and ')}, ` +
+      `while vibrant marigold petals trace a glowing path from memory to our home.\n\n` +
+      `We still carry your words in our hearts: "${memorial.favoriteSaying}". ` +
+      `Though your footsteps no longer sound through our halls, your presence is the flame that never extinguishes in our lives. ` +
+      `Thank you for the kindness you gave us, for your laughter, and for the wisdom we now share with pride.\n\n` +
+      `Rest in peace on this night of celebration. You are, and always will be, remembered.`
 
     return {
       text: letter,
@@ -173,25 +173,25 @@ Foods on Altar: ${memorial.favoriteFoods.join(', ')}`
     }
   }
 
-  // 4. Ghost in the Machine: Channel ancestral reflection & wisdom
+  // 4. Ghost in the Machine: Channel ancestral reflection & wisdom in English
   public async channelSpiritWisdom(
     memorial: MemorialProfile,
     userReflection: string
   ): Promise<GenerateResponse> {
     const systemPrompt = `You are the loving memory of ${memorial.name} (${memorial.relation}), communicating in the spirit of Día de los Muertos.
-Speak with warmth, calm, gentle humor, and timeless wisdom. Ground your advice in everyday simplicity, family values, and their favorite phrase: "${memorial.favoriteSaying}". Keep the reply concise (2-3 paragraphs).`
+Speak with warmth, calm, gentle humor, and timeless wisdom in English. Ground your advice in everyday simplicity, family values, and their favorite phrase: "${memorial.favoriteSaying}". Keep the reply concise (2-3 paragraphs).`
 
     const userPrompt = `A family member standing at your ofrenda asks: "${userReflection}"`
 
     const response = await this.executePrompt(systemPrompt, userPrompt)
     if (response.text) return response
 
-    const wisdom = `Hijo(a) mío(a),\n\n` +
-      `Te escucho con el mismo cariño con que siempre te recibía en la puerta. ` +
-      `En la vida terrenal nos preocupamos por tantas sombras que el viento del tiempo pronto disipa. ` +
-      `Cuando sientas duda o soledad, recuerda lo que siempre te decía: "${memorial.favoriteSaying}".\n\n` +
-      `No camines con prisa en este mundo; tómate un momento para saborear el pan caliente, respirar la lluvia y abrazar a los tuyos. ` +
-      `Yo no me he ido del todo; mientras me recuerdes con una sonrisa y una canción, aquí estaré a tu lado.`
+    const wisdom = `My dear one,\n\n` +
+      `I hear your thoughts with the same warmth with which I always greeted you at the door. ` +
+      `In this life, we often carry heavy worries that the wind of time will soon sweep away. ` +
+      `Whenever you feel doubt, pause and remember what I always told you: "${memorial.favoriteSaying}".\n\n` +
+      `Do not walk through this world in a rush. Take a quiet breath, savor the warm bread, and hold those you love close. ` +
+      `I have not truly left you; so long as you remember me with a smile and a song, I will be right here beside you.`
 
     return {
       text: wisdom,

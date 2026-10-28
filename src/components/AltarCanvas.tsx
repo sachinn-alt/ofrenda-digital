@@ -96,7 +96,7 @@ export const AltarCanvas: React.FC<AltarCanvasProps> = ({
               letterSpacing: '0.08em'
             }}
           >
-            ARCO DE CEMPASÚCHIL — EL CAMINO DE LAS ALMAS
+            MARIGOLD ARCH — THE SACRED PATH OF SOULS
           </span>
           <span style={{ fontSize: '1.4rem' }}>🏵️</span>
         </div>
@@ -128,9 +128,9 @@ export const AltarCanvas: React.FC<AltarCanvasProps> = ({
           {/* Tier Label */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span className="badge-gold">Nivel 1 • El Cielo</span>
+              <span className="badge-gold">Tier 1 • The Heavens (El Cielo)</span>
               <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                Spiritual purity, copal incense, and eternal light
+                Spiritual purity, fragrant copal incense, and guiding eternal light
               </span>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -254,7 +254,7 @@ export const AltarCanvas: React.FC<AltarCanvasProps> = ({
           {/* Tier Label */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span className="badge-gold">Nivel 2 • La Tierra</span>
+              <span className="badge-gold">Tier 2 • Earthly Delights (La Tierra)</span>
               <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                 Favorite dishes, instruments, songs, and laughter shared in life
               </span>
@@ -353,7 +353,7 @@ export const AltarCanvas: React.FC<AltarCanvasProps> = ({
           {/* Tier Label */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span className="badge-gold">Nivel 3 • El Inframundo (Mictlán)</span>
+              <span className="badge-gold">Tier 3 • The Roots / Underworld (Mictlán)</span>
               <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                 Sugar skulls (calaveras), hot cocoa, marigold carpet, and sacred foundation
               </span>
@@ -433,7 +433,7 @@ export const AltarCanvas: React.FC<AltarCanvasProps> = ({
             }}
           >
             <span>🏵️ 🏵️ 🏵️</span>
-            <span>Tapete de Cempasúchil — Guiding the spirits home with love and remembrance</span>
+            <span>Marigold Petal Carpet — Guiding souls home with love and remembrance</span>
             <span>🏵️ 🏵️ 🏵️</span>
           </div>
         </div>

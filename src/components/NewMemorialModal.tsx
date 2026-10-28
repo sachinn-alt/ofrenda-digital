@@ -210,9 +210,9 @@ export const NewMemorialModal: React.FC<NewMemorialModalProps> = ({
                   fontFamily: 'inherit'
                 }}
               >
-                <option value={1}>Tier 1: El Cielo (Top)</option>
-                <option value={2}>Tier 2: La Tierra (Middle)</option>
-                <option value={3}>Tier 3: El Inframundo (Bottom)</option>
+                <option value={1}>Tier 1: The Heavens (El Cielo)</option>
+                <option value={2}>Tier 2: Earthly Memories (La Tierra)</option>
+                <option value={3}>Tier 3: The Roots / Underworld (Mictlán)</option>
               </select>
             </div>
           </div>
