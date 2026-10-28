@@ -16,19 +16,19 @@ Between October 31 (Halloween) and November 1–2 (Día de los Muertos), our cal
 **Ofrenda Digital** is an intimate, interactive virtual sanctuary and oral history preserver built around **open-weight Google Gemma AI**.
 
 ### Core Capabilities:
-1. **Interactive 3-Tier Altar (Los Tres Niveles):**
-   - **Tier 1 (El Cielo / The Heavens):** Spiritual purity, ancestral portraits in baroque golden frames, copal incense burner with rising animated smoke curls, vessel of pure water, and holy salt.
-   - **Tier 2 (La Tierra / Earthly Remembrances):** Loved ones' portraits surrounded by their favorite earthly joys — freshly baked pan de muerto, clay pot coffee (*café de olla*), acoustic guitars, and secret family recipe books.
-   - **Tier 3 (El Inframundo / Mictlán & Foundation):** Brightly iced sugar skulls (*calaveras de azúcar*), fruit baskets, a carpet of marigold petals, and warm path candles.
-2. **Dynamic Candlelight & Procedural Ambient Soundscapes:**
-   - Real-time clickable candles with flame flicker physics. Clicking a candle plays an authentic chime and dedicates light to an ancestor.
-   - A built-in procedural Web Audio synthesizer that generates contemplative nylon-string guitar arpeggios and resonant altar bell chimes without requiring external audio downloads.
-   - Floating marigold petals drifting gently across the screen.
-3. **Open-Weight Gemma AI Remembrance Engine:**
-   - **Oral History Preserver:** Speak into your microphone (via Web Speech API) or type raw stream-of-consciousness childhood memories. Gemma synthesizes conversational snippets into enduring, literary biographical prose capsules.
-   - **Calaverita Literaria Generator:** Gemma drafts traditional rhyming Spanish folk verses celebrating each person’s humor, favorite dishes, and endearing quirks in the classic style of José Guadalupe Posada.
+1. **Interactive 3-Tier Baroque Altar (Los Tres Niveles):**
+   - **Tier 1 (El Cielo / The Heavens):** Spiritual purity, grand baroque golden arched frames with inner velvet borders, copal incense burner with rising animated smoke curls, vessel of pure water, and sacred salt.
+   - **Tier 2 (La Tierra / Earthly Remembrances):** Loved ones' portrait gallery surrounded by their favorite earthly joys — freshly baked pan de muerto, clay pot coffee (*café de olla*), acoustic guitars, and secret family recipes.
+   - **Tier 3 (El Inframundo / Mictlán & Roots):** Vividly iced sugar skulls (*calaveras de azúcar*), autumn fruit baskets, and the luminous **Marigold Carpet (*Tapete de Cempasúchil*)** guiding path nodes (Doorway → Courtyard → Threshold → Ofrenda).
+2. **Authentic Scalloped Papel Picado Ribbon & Atmospheric Physics:**
+   - Real-time clickable candles with flame flicker physics. Clicking a candle plays an authentic chime, increases the living flame counter ("Lit by the Family"), and dedicates light to an ancestor.
+   - A built-in procedural Web Audio synthesizer that generates contemplative nylon-string guitar arpeggios and resonant altar bell chimes without requiring external audio downloads or latency.
+   - Floating marigold petals drifting gently across the screen with natural ambient turbulence.
+3. **Open-Weight Gemma AI Remembrance Engine (Slide-Over Sanctuary Drawer):**
+   - **Oral History Preserver:** Speak into your microphone (via Web Speech API) or type raw stream-of-consciousness childhood memories. Gemma synthesizes conversational snippets into enduring, literary biographical prose capsules on aged parchment with wax seals.
+   - **Calaverita Literaria Studio:** Gemma drafts traditional 4-stanza octosyllabic rhyming folk verses celebrating each person’s humor, favorite dishes, and endearing quirks in the classic style of José Guadalupe Posada.
    - **Altar Remembrance Letters:** Generates formal, deeply moving eulogy letters to be placed beside family photos and read aloud at the altar.
-   - **Channel Ancestral Wisdom (Ghost in the Machine):** Ask an ancestor for life guidance or share what is on your heart. Gemma channels their voice, grounded in their personality, life values, and favorite sayings.
+   - **Ancestral Wisdom Dialogue (Ghost in the Machine):** Ask an ancestor for life guidance or share what is on your heart. Gemma channels their voice, grounded in their personality, life values, and favorite sayings.
 4. **100% Offline & Private "Memory Capsules":**
    - Zero telemetry, zero external tracking, zero cloud server dependencies.
    - Export and import full **Memory Capsules** (`ofrenda-capsule.json`) to keep on a private USB flash drive or pass down through generations.
@@ -39,12 +39,16 @@ Between October 31 (Halloween) and November 1–2 (Día de los Muertos), our cal
 
 - **Live Production App:** [https://ofrenda-digital.onrender.com](https://ofrenda-digital.onrender.com)
 - **1-Click Deploy to Render:** [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sachinn-alt/ofrenda-digital)
+- **GitHub Repository:** [https://github.com/sachinn-alt/ofrenda-digital](https://github.com/sachinn-alt/ofrenda-digital)
 - **Live Local Preview:** Runs on `http://localhost:5174/`
-- **Interactive Walkthrough Video / Screenshots:**
 
-![Ofrenda Digital Altar Preview](https://raw.githubusercontent.com/sachinn-alt/ofrenda-digital/main/preview.png)
+### Visual Walkthrough
 
-*The candlelit 3-tier altar featuring the Marigold Arch, Doña Rosa and Don Mateo's memorial frames, traditional offerings, and procedural ambient strings.*
+![Ofrenda Digital 3-Tier Altar](https://raw.githubusercontent.com/sachinn-alt/ofrenda-digital/main/preview.png)
+*The candlelit 3-tier altar featuring the Baroque Golden Arch, Doña Rosa and Don Mateo's memorial frames, traditional offerings, and procedural ambient strings.*
+
+![Slide-Over Sanctuary Drawer & Calaverita Studio](https://raw.githubusercontent.com/sachinn-alt/ofrenda-digital/main/drawer_preview.png)
+*The Slide-Over Sanctuary Drawer featuring the Calaverita Literaria Studio, Oral History Weaver, and Ancestral Dialogue.*
 
 ---
 

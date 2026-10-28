@@ -17,6 +17,12 @@ Between Halloween night (October 31) and Día de los Muertos (November 1 & 2), t
 
 **Ofrenda Digital** translates this ancient practice into a private, local-first interactive sanctuary. Rather than sending sacred family memories, photographs, and spoken grief to corporate cloud APIs, **Ofrenda Digital runs open-weight Google Gemma models entirely on your local machine**. It works with the internet and lights turned off, preserving family oral histories, crafting authentic *Calaveritas Literarias*, and channeling ancestral reflections in total privacy.
 
+![Ofrenda Digital 3-Tier Altar](preview.png)
+*The candlelit 3-tier altar featuring the Baroque Golden Arch, Doña Rosa and Don Mateo's memorial frames, traditional offerings, and procedural ambient strings.*
+
+![Slide-Over Sanctuary Drawer & Calaverita Studio](drawer_preview.png)
+*The Slide-Over Sanctuary Drawer featuring the Calaverita Literaria Studio, Oral History Weaver, and Ancestral Dialogue.*
+
 ---
 
 ## ✨ Key Features
