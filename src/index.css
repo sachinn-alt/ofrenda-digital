@@ -1,33 +1,57 @@
 :root {
-  --bg-deep-obsidian: #08070d;
-  --bg-altar-surface: #110e1a;
-  --bg-card-glass: rgba(22, 18, 32, 0.75);
-  --border-gold-subtle: rgba(245, 183, 0, 0.22);
-  --border-gold-glow: rgba(255, 179, 0, 0.55);
+  --bg-deep-obsidian: #161020;
+  --bg-surface: #161020;
+  --bg-surface-low: #1f1929;
+  --bg-surface-container: #231d2d;
+  --bg-surface-high: #2e2738;
+  --bg-surface-highest: #393243;
+  --bg-surface-lowest: #110b1b;
+  --bg-altar-surface: #1b1527;
+  --bg-card-glass: rgba(35, 29, 45, 0.78);
+  --border-gold-subtle: rgba(255, 193, 116, 0.22);
+  --border-gold-glow: rgba(245, 158, 11, 0.6);
+
+  --primary: #ffc174;
+  --primary-container: #f59e0b;
+  --secondary: #ffb1c7;
+  --secondary-container: #be0062;
+  --tertiary: #e4bfff;
+  --tertiary-container: #5f258e;
 
   --cempasuchil-gold: #ffaa00;
-  --cempasuchil-amber: #ff7700;
+  --cempasuchil-amber: #f59e0b;
   --cempasuchil-deep: #e65100;
 
   --candle-flame-core: #ffffff;
   --candle-flame-inner: #ffe066;
   --candle-flame-outer: #ff9900;
-  --candle-halo: rgba(255, 170, 0, 0.35);
-
-  --papel-pink: #e91e63;
-  --papel-cyan: #00bcd4;
-  --papel-purple: #9c27b0;
-  --papel-yellow: #ffeb3b;
-  --papel-orange: #ff9800;
+  --candle-halo: rgba(245, 158, 11, 0.4);
 
   --text-primary: #fcf9f2;
   --text-secondary: #c9c2b5;
   --text-muted: #8c8273;
-  --text-gold: #ffd166;
+  --text-gold: #ffc174;
 
-  --font-serif-display: 'Cinzel Decorative', Georgia, serif;
+  --font-serif-display: 'Playfair Display', Georgia, serif;
   --font-serif-title: 'Cinzel', serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
 }
 
 * {

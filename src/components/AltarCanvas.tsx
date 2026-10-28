@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { MemorialProfile, AltarOffering, CandleState } from '../types'
 import { Candle } from './Candle'
-import { Plus, Heart, Sparkles, BookOpen, Music, Flame, Info } from 'lucide-react'
+import { Plus, Heart, Sparkles, BookOpen, Music, Flame, Shield, X, Check } from 'lucide-react'
 import { soundService } from '../services/soundService'
 
 interface AltarCanvasProps {
@@ -25,6 +25,15 @@ export const AltarCanvas: React.FC<AltarCanvasProps> = ({
   onOpenNewMemorial,
   onRemoveOffering
 }) => {
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg)
+    setTimeout(() => {
+      setToastMessage(null)
+    }, 3200)
+  }
+
   const getCandlesForTier = (tier: 1 | 2 | 3) => candles.filter(c => c.tier === tier)
   const getOfferingsForTier = (tier: 1 | 2 | 3) => offerings.filter(o => o.tier === tier)
   const getMemorialsForTier = (tier: 1 | 2 | 3) => memorials.filter(m => m.tierPosition === tier)
@@ -34,623 +43,572 @@ export const AltarCanvas: React.FC<AltarCanvasProps> = ({
     onSelectMemorial(memorial)
   }
 
-  // Emoji and representation for offerings
-  const getOfferingVisual = (type: string) => {
-    switch (type) {
-      case 'cempasuchil': return { icon: '🏵️', color: '#ff9800' }
-      case 'pan_de_muerto': return { icon: '🍞', color: '#ffb74d' }
-      case 'calavera': return { icon: '💀', color: '#e91e63' }
-      case 'copal': return { icon: '🏺', color: '#26a69a' }
-      case 'water_salt': return { icon: '🍶', color: '#00e5ff' }
-      case 'guitar': return { icon: '🎸', color: '#d84315' }
-      case 'coffee': return { icon: '☕', color: '#6d4c41' }
-      case 'book': return { icon: '📖', color: '#7e57c2' }
-      case 'chocolate': return { icon: '🍫', color: '#5d4037' }
-      default: return { icon: '✨', color: '#ffd54f' }
+  const handleQuickLight = (e: React.MouseEvent, tier: 1 | 2 | 3) => {
+    e.stopPropagation()
+    const tierCandles = getCandlesForTier(tier)
+    const unlit = tierCandles.find(c => !c.isLit)
+    if (unlit) {
+      onToggleCandle(unlit.id)
+      showToast('A warm candle was lit with devotion.')
+    } else if (tierCandles.length > 0) {
+      onToggleCandle(tierCandles[0].id)
+      showToast('Candle flame adjusted.')
     }
   }
 
+  const litCount = candles.filter(c => c.isLit).length
+
+  // Finding Abuela Rosa or first memorial for center spot
+  const primaryAncestor = memorials.find(m => m.tierPosition === 1) || memorials[0]
+  const tier2Ancestors = memorials.filter(m => m.id !== primaryAncestor?.id)
+
   return (
-    <div 
-      className="altar-canvas-wrapper"
-      style={{
-        width: '100%',
-        maxWidth: 1200,
-        margin: '28px auto 60px auto',
-        padding: '0 20px',
-        position: 'relative'
-      }}
-    >
-      {/* Golden Floral Arch at Top of Altar */}
-      <div 
-        style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          marginBottom: -10,
-          position: 'relative',
-          zIndex: 3
-        }}
-      >
-        <div 
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            background: 'linear-gradient(135deg, rgba(255, 170, 0, 0.25), rgba(230, 81, 0, 0.25))',
-            border: '1px solid rgba(255, 179, 0, 0.5)',
-            padding: '8px 24px',
-            borderRadius: '40px',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 0 30px rgba(255, 160, 0, 0.25)'
-          }}
-        >
-          <span style={{ fontSize: '1.4rem' }}>🏵️</span>
-          <span 
-            className="font-serif" 
-            style={{ 
-              color: 'var(--cempasuchil-gold)', 
-              fontWeight: 700, 
-              fontSize: '1.1rem',
-              letterSpacing: '0.08em'
-            }}
-          >
-            MARIGOLD ARCH — THE SACRED PATH OF SOULS
+    <div className="w-full max-w-6xl mx-auto px-4 md:px-6 pt-24 pb-32 flex flex-col items-center relative select-none">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-24 right-6 z-50 px-4 py-2.5 rounded-xl bg-[#2e2738] text-[#ffc174] font-medium text-sm shadow-2xl border border-[#f59e0b]/40 flex items-center gap-2 animate-bounce">
+          <Flame size={16} className="text-[#f59e0b]" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Top Sanctuary Metadata & Living Flame Counter Bar */}
+      <div className="flex flex-wrap items-center justify-between w-full gap-3 mb-6">
+        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#2e2738]/80 border border-[#ffc174]/15 shadow-md">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#f59e0b] animate-pulse"></span>
+          <span className="text-xs text-[#ffc174] font-semibold tracking-widest uppercase">
+            Sacred Family Sanctuary
           </span>
-          <span style={{ fontSize: '1.4rem' }}>🏵️</span>
+          <span className="text-[#a08e7a] text-xs">•</span>
+          <span className="text-xs text-[#c9c2b5]">
+            Grand November Ofrenda
+          </span>
+        </div>
+
+        {/* Living Flame Aggregate Counter Badge */}
+        <div 
+          onClick={(e) => handleQuickLight(e, 1)}
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1f1929] border border-[#f59e0b]/30 shadow-[0_0_24px_rgba(245,158,11,0.18)] cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95"
+          title="Click to light a tribute candle"
+        >
+          <Flame size={16} className="text-[#ffc174] animate-pulse" />
+          <span className="text-sm font-semibold text-[#ffc174]">
+            {litCount} Candles Lit
+          </span>
+          <span className="text-xs text-[#ffb1c7] uppercase tracking-wider">
+            by the Family
+          </span>
         </div>
       </div>
 
-      {/* 3-Tier Altar Physical Hierarchy */}
-      <div 
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 20,
-          marginTop: 20
-        }}
-      >
-        {/* ======================================================== */}
-        {/* TIER 1: EL CIELO (The Heavens & Spiritual Ancestry)     */}
-        {/* ======================================================== */}
-        <div 
-          className="glass-panel-glow altar-tier"
-          style={{
-            width: '84%',
-            margin: '0 auto',
-            padding: '24px 28px 20px 28px',
-            background: 'linear-gradient(180deg, rgba(32, 22, 50, 0.85) 0%, rgba(18, 14, 28, 0.9) 100%)',
-            borderTop: '2px solid rgba(255, 215, 0, 0.6)',
-            position: 'relative'
-          }}
-        >
-          {/* Tier Label */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span className="badge-gold">Tier 1 • The Heavens (El Cielo)</span>
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                Spiritual purity, fragrant copal incense, and guiding eternal light
-              </span>
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button 
-                className="btn-ghost" 
-                onClick={() => onOpenOfferingModal(1)}
-                style={{ fontSize: '0.8rem', color: 'var(--cempasuchil-gold)' }}
-              >
-                <Plus size={14} /> Add Offering
-              </button>
-            </div>
+      {/* Sacred Overhead Arch Crest (Arco de Cempasúchil) */}
+      <div className="relative w-full flex flex-col items-center text-center mb-8">
+        <div className="w-full flex items-center justify-center gap-3 mb-2 opacity-85">
+          <div className="h-px w-20 md:w-32 bg-gradient-to-r from-transparent to-[#ffc174]"></div>
+          <div className="flex items-center gap-1.5 text-[#ffc174]">
+            <span className="text-sm">🏵️</span>
+            <span className="text-xs uppercase tracking-[0.25em] font-semibold">
+              In Miquiztli • In Yoliliztli
+            </span>
+            <span className="text-sm">🏵️</span>
           </div>
-
-          {/* Central Copal Incense Burner Accent with Smoke Animation */}
-          <div 
-            style={{
-              position: 'absolute',
-              top: -18,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              pointerEvents: 'none'
-            }}
-          >
-            {/* Rising smoke curls */}
-            <div 
-              style={{
-                width: 6,
-                height: 18,
-                background: 'radial-gradient(circle, rgba(220, 220, 240, 0.5) 0%, transparent 80%)',
-                animation: 'copal-smoke 3.2s ease-out infinite',
-                filter: 'blur(3px)'
-              }}
-            />
-          </div>
-
-          {/* Portrait Frames on Tier 1 */}
-          <div 
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 24,
-              flexWrap: 'wrap',
-              margin: '12px 0 20px 0'
-            }}
-          >
-            {getMemorialsForTier(1).map(memorial => (
-              <MemorialFrame 
-                key={memorial.id} 
-                memorial={memorial} 
-                onClick={() => handleFrameClick(memorial)} 
-              />
-            ))}
-
-            {getMemorialsForTier(1).length === 0 && (
-              <div 
-                onClick={() => onOpenNewMemorial(1)}
-                style={{
-                  border: '2px dashed rgba(255, 170, 0, 0.3)',
-                  borderRadius: 12,
-                  padding: '28px 36px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 8,
-                  cursor: 'pointer',
-                  color: 'var(--text-muted)'
-                }}
-              >
-                <Plus size={24} color="var(--cempasuchil-gold)" />
-                <span style={{ fontSize: '0.88rem' }}>Place Beloved Portrait on Tier 1</span>
-              </div>
-            )}
-          </div>
-
-          {/* Offerings on Tier 1 */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 16 }}>
-            {getOfferingsForTier(1).map(offering => (
-              <OfferingBadge 
-                key={offering.id} 
-                offering={offering} 
-                visual={getOfferingVisual(offering.type)}
-                onRemove={() => onRemoveOffering(offering.id)} 
-              />
-            ))}
-          </div>
-
-          {/* Candle Line on Tier 1 */}
-          <div 
-            style={{
-              display: 'flex',
-              justifyContent: 'space-around',
-              alignItems: 'flex-end',
-              borderTop: '1px solid rgba(255, 170, 0, 0.2)',
-              paddingTop: 8
-            }}
-          >
-            {getCandlesForTier(1).map(candle => (
-              <Candle key={candle.id} candle={candle} onToggle={onToggleCandle} size="md" />
-            ))}
-          </div>
+          <div className="h-px w-20 md:w-32 bg-gradient-to-l from-transparent to-[#ffc174]"></div>
         </div>
 
-        {/* ======================================================== */}
-        {/* TIER 2: LA TIERRA (Earthly Delights & Fond Remembrances)  */}
-        {/* ======================================================== */}
-        <div 
-          className="glass-panel altar-tier"
-          style={{
-            width: '93%',
-            margin: '0 auto',
-            padding: '24px 30px 20px 30px',
-            background: 'linear-gradient(180deg, rgba(26, 18, 38, 0.9) 0%, rgba(16, 12, 24, 0.95) 100%)',
-            borderTop: '3px solid rgba(255, 152, 0, 0.55)',
-            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)',
-            position: 'relative'
-          }}
-        >
-          {/* Tier Label */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span className="badge-gold">Tier 2 • Earthly Delights (La Tierra)</span>
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                Favorite dishes, instruments, songs, and laughter shared in life
-              </span>
+        <h1 className="font-serif text-3xl md:text-5xl font-bold text-[#ffc174] tracking-tight drop-shadow-[0_4px_24px_rgba(245,158,11,0.3)]">
+          Main Altar of the Spirits
+        </h1>
+        <p className="text-sm md:text-base text-[#c9c2b5] max-w-2xl mt-1.5">
+          Three tiers of light, fragrance, and sacred memory preserved beyond time by sovereign local Gemma AI.
+        </p>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 3-TIER SACRED ALTAR STAGE                                                 */}
+      {/* ========================================================================= */}
+      <div className="w-full flex flex-col items-center relative z-20 space-y-8 max-w-5xl">
+        
+        {/* ======================================================= */}
+        {/* TIER 1: CIELO (The Heavens & Spiritual Ascent)           */}
+        {/* ======================================================= */}
+        <section className="w-full flex flex-col items-center relative">
+          {/* Overline Marker */}
+          <div className="flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-[#110b1b] border border-[#ffc174]/15 shadow-sm">
+            <span className="text-xs uppercase tracking-widest text-[#ffc174] font-semibold">
+              Tier I • Cielo
+            </span>
+            <span className="text-[#a08e7a] text-xs">•</span>
+            <span className="text-xs text-[#c9c2b5]">
+              Heavenly Abode • Purification and Light
+            </span>
+          </div>
+
+          {/* Platform Surface Card */}
+          <div className="w-full rounded-2xl bg-[#231d2d]/80 backdrop-blur-xl p-5 md:p-8 border border-[#ffc174]/20 shadow-[0_16px_40px_rgba(0,0,0,0.6)] flex flex-col items-center relative overflow-hidden">
+            {/* Golden Velvet Shimmer Glow */}
+            <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#ffc174]/15 rounded-full blur-[90px] pointer-events-none"></div>
+
+            <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative z-10">
+              {/* Left Wing: Holy Salt Vessel & Chalice */}
+              <div className="md:col-span-3 flex flex-col items-center md:items-end justify-center gap-3">
+                {/* Vessel of Pure Water */}
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#2e2738]/85 border border-[#ffc174]/10 shadow-md w-full max-w-[240px]">
+                  <div className="w-10 h-10 rounded-lg bg-[#110b1b] flex items-center justify-center text-[#ffc174] shadow-inner">
+                    <span className="material-symbols-outlined text-[22px]">water_drop</span>
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs font-semibold text-[#fcf9f2] truncate">Vessel of Pure Water</span>
+                    <span className="text-[11px] text-[#c9c2b5]">To quench the soul's thirst</span>
+                  </div>
+                </div>
+
+                {/* Holy Salt Bowl */}
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#2e2738]/85 border border-[#ffc174]/10 shadow-md w-full max-w-[240px]">
+                  <div className="w-10 h-10 rounded-lg bg-[#110b1b] flex items-center justify-center text-[#ffc174] shadow-inner">
+                    <span className="material-symbols-outlined text-[22px]">grain</span>
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs font-semibold text-[#fcf9f2] truncate">Sacred Salt</span>
+                    <span className="text-[11px] text-[#c9c2b5]">Spiritual purification</span>
+                  </div>
+                </div>
+
+                {/* Left Pillar Candle */}
+                {getCandlesForTier(1).slice(0, 1).map(candle => (
+                  <div key={candle.id} className="pt-2">
+                    <Candle candle={candle} onToggle={onToggleCandle} size="md" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Centerpiece: Grand Baroque Golden Arched Portrait Frame */}
+              <div className="md:col-span-6 flex flex-col items-center justify-center">
+                {primaryAncestor ? (
+                  <div 
+                    onClick={() => handleFrameClick(primaryAncestor)}
+                    className="relative group cursor-pointer"
+                  >
+                    {/* Golden Radiance Aura */}
+                    <div className="absolute -inset-4 rounded-full bg-[#f59e0b]/20 blur-xl group-hover:bg-[#f59e0b]/35 transition-all duration-700"></div>
+
+                    {/* Handcrafted Baroque Arched Portrait Frame */}
+                    <div className="relative w-64 h-80 sm:w-72 sm:h-88 rounded-t-[100px] rounded-b-2xl p-3 bg-gradient-to-b from-[#ffc174] via-[#f59e0b] to-[#be0062]/60 shadow-[0_20px_60px_rgba(0,0,0,0.85)] border border-[#ffc174]/50 transition-transform duration-500 group-hover:-translate-y-1">
+                      {/* Inner Velvet Matting */}
+                      <div className="w-full h-full rounded-t-[90px] rounded-b-xl overflow-hidden bg-[#110b1b] relative flex flex-col border border-black/80">
+                        <img 
+                          src={primaryAncestor.photoUrl} 
+                          alt={primaryAncestor.name}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-95 contrast-105"
+                        />
+
+                        {/* Scrim with Ancestor Name */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#110b1b] via-[#110b1b]/30 to-transparent flex flex-col justify-end p-4 text-center">
+                          <span className="font-serif text-lg md:text-xl text-[#ffc174] font-bold tracking-wide leading-tight drop-shadow-md">
+                            {primaryAncestor.name}
+                          </span>
+                          <span className="text-xs text-[#ffb1c7] tracking-widest uppercase mt-0.5 font-medium">
+                            {primaryAncestor.birthYear} — {primaryAncestor.passingYear}
+                          </span>
+                          <div className="flex items-center justify-center gap-1.5 mt-2 text-[#fcf9f2] text-xs">
+                            <span className="material-symbols-outlined text-[15px] text-[#ffc174]">mic</span>
+                            <span>{primaryAncestor.oralMemories?.length || 1} Oral History Preserved</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Golden Arch Crown Star Emblem */}
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-[#f59e0b] text-[#110b1b] flex items-center justify-center shadow-lg border border-[#ffc174]">
+                      <span className="material-symbols-outlined text-[18px]">stars</span>
+                    </div>
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => onOpenNewMemorial(1)}
+                    className="p-8 border-2 border-dashed border-[#ffc174]/40 rounded-2xl flex flex-col items-center gap-2 hover:border-[#f59e0b] transition-colors"
+                  >
+                    <Plus size={28} className="text-[#ffc174]" />
+                    <span className="text-sm text-[#ffc174] font-semibold">Place Beloved Portrait on Tier 1</span>
+                  </button>
+                )}
+
+                {/* Candlelight Quote Banner */}
+                <p className="font-serif italic text-sm md:text-base text-[#ffc174] mt-4 text-center max-w-sm">
+                  “While we are remembered with love, we remain alive in the home.”
+                </p>
+              </div>
+
+              {/* Right Wing: Copal Burner & Tall Candle */}
+              <div className="md:col-span-3 flex flex-col items-center md:items-start justify-center gap-3">
+                {/* Sahumerio de Copal (Copal Incense Burner) */}
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#2e2738]/85 border border-[#ffc174]/10 shadow-md w-full max-w-[240px]">
+                  <div className="w-10 h-10 rounded-lg bg-[#110b1b] flex items-center justify-center text-[#ffc174] shadow-inner relative overflow-hidden">
+                    <span className="material-symbols-outlined text-[22px]">local_fire_department</span>
+                    <svg className="absolute inset-0 w-full h-full opacity-60" viewBox="0 0 32 32">
+                      <path d="M16 26 C14 20, 18 16, 16 10 C14 6, 16 2, 16 2" fill="none" stroke="currentColor" strokeDasharray="2 3" strokeWidth="1.5">
+                        <animate attributeName="stroke-dashoffset" dur="2s" repeatCount="indefinite" values="10;0" />
+                      </path>
+                    </svg>
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs font-semibold text-[#fcf9f2] truncate">Copal Incense Burner</span>
+                    <span className="text-[11px] text-[#c9c2b5]">Guiding sacred fragrance</span>
+                  </div>
+                </div>
+
+                {/* Family Rosary Heirloom */}
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#2e2738]/85 border border-[#ffc174]/10 shadow-md w-full max-w-[240px]">
+                  <div className="w-10 h-10 rounded-lg bg-[#110b1b] flex items-center justify-center text-[#ffb1c7] shadow-inner">
+                    <span className="material-symbols-outlined text-[20px]">church</span>
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs font-semibold text-[#fcf9f2] truncate">Family Rosary</span>
+                    <span className="text-[11px] text-[#c9c2b5]">Olive wood heirloom</span>
+                  </div>
+                </div>
+
+                {/* Right Pillar Candle */}
+                {getCandlesForTier(1).slice(1, 2).map(candle => (
+                  <div key={candle.id} className="pt-2">
+                    <Candle candle={candle} onToggle={onToggleCandle} size="md" />
+                  </div>
+                ))}
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
+
+            {/* Tier 1 Offering Badges */}
+            <div className="flex items-center justify-center gap-2 flex-wrap mt-6 pt-4 border-t border-[#ffc174]/15 w-full">
+              {getOfferingsForTier(1).map(offering => (
+                <div 
+                  key={offering.id}
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#110b1b] border border-[#ffc174]/20 text-xs text-[#fcf9f2] shadow-sm"
+                >
+                  <span>🏵️</span>
+                  <span>{offering.name}</span>
+                  <button 
+                    onClick={() => onRemoveOffering(offering.id)}
+                    className="text-[#a08e7a] hover:text-[#ffc174] ml-1"
+                    title="Remove offering"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
               <button 
-                className="btn-ghost" 
-                onClick={() => onOpenOfferingModal(2)}
-                style={{ fontSize: '0.8rem', color: 'var(--cempasuchil-gold)' }}
+                onClick={() => onOpenOfferingModal(1)}
+                className="flex items-center gap-1 px-3 py-1 rounded-full bg-[#2e2738] text-xs text-[#ffc174] hover:bg-[#393243] transition-colors"
               >
-                <Plus size={14} /> Add Offering
+                <Plus size={12} /> Place Offering
               </button>
             </div>
           </div>
+        </section>
 
-          {/* Portrait Frames on Tier 2 */}
-          <div 
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 28,
-              flexWrap: 'wrap',
-              margin: '12px 0 20px 0'
-            }}
-          >
-            {getMemorialsForTier(2).map(memorial => (
-              <MemorialFrame 
-                key={memorial.id} 
-                memorial={memorial} 
-                onClick={() => handleFrameClick(memorial)} 
-              />
-            ))}
+        {/* ======================================================= */}
+        {/* TIER 2: TIERRA (Earth, Shared Table & Earthly Nourishment) */}
+        {/* ======================================================= */}
+        <section className="w-full flex flex-col items-center relative -mt-3">
+          {/* Overline Marker */}
+          <div className="flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-[#110b1b] border border-[#ffb1c7]/20 shadow-sm">
+            <span className="text-xs uppercase tracking-widest text-[#ffb1c7] font-semibold">
+              Tier II • Tierra
+            </span>
+            <span className="text-[#a08e7a] text-xs">•</span>
+            <span className="text-xs text-[#c9c2b5]">
+              Earthly Banquet • Bread, Coffee, and Melodies
+            </span>
+          </div>
 
-            {getMemorialsForTier(2).length === 0 && (
+          {/* Tier 2 Wide Sanctuary Shelf Deck */}
+          <div className="w-full rounded-2xl bg-[#2e2738]/85 backdrop-blur-xl p-5 md:p-7 border border-[#ffc174]/20 shadow-[0_20px_50px_rgba(0,0,0,0.65)] flex flex-col gap-6 relative overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <span className="text-base md:text-lg font-serif font-bold text-[#ffc174] flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#ffc174]">diversity_1</span>
+                Portraits at This Table
+              </span>
+              <span className="text-xs text-[#c9c2b5]">
+                Tap a portrait to listen or dedicate light
+              </span>
+            </div>
+
+            {/* Memorials Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Existing Tier 2 Ancestors */}
+              {tier2Ancestors.map(mem => (
+                <div 
+                  key={mem.id}
+                  onClick={() => handleFrameClick(mem)}
+                  className="p-4 rounded-xl bg-[#110b1b]/80 border border-[#ffc174]/15 hover:border-[#f59e0b]/50 shadow-md hover:bg-[#1f1929] transition-all cursor-pointer group flex flex-col justify-between"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#231d2d] shrink-0 border border-[#ffc174]/30 shadow-inner">
+                      <img 
+                        src={mem.photoUrl} 
+                        alt={mem.name} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-serif text-sm font-bold text-[#fcf9f2] truncate group-hover:text-[#ffc174] transition-colors">
+                        {mem.name}
+                      </span>
+                      <span className="text-xs text-[#ffb1c7] uppercase font-medium">
+                        {mem.birthYear} — {mem.passingYear}
+                      </span>
+                      <p className="text-xs text-[#c9c2b5] mt-1 line-clamp-2">
+                        {mem.epitaph || mem.favoriteSaying || 'Remembered with love, music, and quiet devotion.'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#ffc174]/10">
+                    <span className="text-xs text-[#ffc174] flex items-center gap-1 font-medium">
+                      <span className="material-symbols-outlined text-[14px]">headphones</span>
+                      {mem.oralMemories?.length || 1} Anecdotes
+                    </span>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleQuickLight(e, 2)
+                      }}
+                      className="text-xs text-[#fcf9f2] hover:text-[#ffc174] flex items-center gap-1 font-semibold"
+                      type="button"
+                    >
+                      <span className="material-symbols-outlined text-[15px] text-[#ffc174]">local_fire_department</span>
+                      Dedicate Light
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {/* + Add Loved One Sacred Portal Card */}
               <div 
                 onClick={() => onOpenNewMemorial(2)}
-                style={{
-                  border: '2px dashed rgba(255, 170, 0, 0.3)',
-                  borderRadius: 12,
-                  padding: '24px 32px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 8,
-                  cursor: 'pointer',
-                  color: 'var(--text-muted)'
-                }}
+                className="p-4 rounded-xl bg-[#110b1b]/40 border border-dashed border-[#ffc174]/30 hover:border-[#ffc174] hover:bg-[#110b1b]/70 transition-all flex flex-col items-center justify-center text-center cursor-pointer group py-6"
               >
-                <Plus size={22} color="var(--cempasuchil-gold)" />
-                <span style={{ fontSize: '0.86rem' }}>Place Memorial Photo on Tier 2</span>
+                <div className="w-11 h-11 rounded-full bg-[#231d2d] border border-[#ffc174]/30 flex items-center justify-center text-[#ffc174] group-hover:bg-[#f59e0b] group-hover:text-[#110b1b] transition-colors mb-2 shadow-sm">
+                  <Plus size={20} />
+                </div>
+                <span className="font-serif text-sm font-bold text-[#fcf9f2] group-hover:text-[#ffc174] transition-colors">
+                  + Place a Loved One
+                </span>
+                <span className="text-xs text-[#c9c2b5] max-w-[180px] mt-0.5">
+                  Upload portrait or transcribe spoken memories locally
+                </span>
               </div>
-            )}
-          </div>
-
-          {/* Offerings on Tier 2 */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 16 }}>
-            {getOfferingsForTier(2).map(offering => (
-              <OfferingBadge 
-                key={offering.id} 
-                offering={offering} 
-                visual={getOfferingVisual(offering.type)}
-                onRemove={() => onRemoveOffering(offering.id)} 
-              />
-            ))}
-          </div>
-
-          {/* Candle Line on Tier 2 */}
-          <div 
-            style={{
-              display: 'flex',
-              justifyContent: 'space-around',
-              alignItems: 'flex-end',
-              borderTop: '1px solid rgba(255, 170, 0, 0.2)',
-              paddingTop: 8
-            }}
-          >
-            {getCandlesForTier(2).map(candle => (
-              <Candle key={candle.id} candle={candle} onToggle={onToggleCandle} size="md" />
-            ))}
-          </div>
-        </div>
-
-        {/* ======================================================== */}
-        {/* TIER 3: EL INFRAMUNDO / MICTLÁN (Roots & Sweet Life)     */}
-        {/* ======================================================== */}
-        <div 
-          className="glass-panel altar-tier"
-          style={{
-            width: '100%',
-            padding: '24px 32px 24px 32px',
-            background: 'linear-gradient(180deg, rgba(20, 14, 28, 0.95) 0%, rgba(12, 9, 18, 0.98) 100%)',
-            borderTop: '3px solid rgba(230, 81, 0, 0.65)',
-            boxShadow: '0 12px 50px rgba(0, 0, 0, 0.65)'
-          }}
-        >
-          {/* Tier Label */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span className="badge-gold">Tier 3 • The Roots / Underworld (Mictlán)</span>
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                Sugar skulls (calaveras), hot cocoa, marigold carpet, and sacred foundation
-              </span>
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button 
-                className="btn-ghost" 
-                onClick={() => onOpenOfferingModal(3)}
-                style={{ fontSize: '0.8rem', color: 'var(--cempasuchil-gold)' }}
+
+            {/* Earthly Offerings Tray */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+              <div className="p-3 rounded-xl bg-[#231d2d] border border-[#ffc174]/10 flex items-center gap-3 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-[#110b1b] flex items-center justify-center text-xl shrink-0">
+                  🍞
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs font-semibold text-[#fcf9f2] truncate">Pan de Muerto</span>
+                  <span className="text-[11px] text-[#c9c2b5]">Orange blossom & sugar</span>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#231d2d] border border-[#ffc174]/10 flex items-center gap-3 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-[#110b1b] flex items-center justify-center text-xl shrink-0">
+                  ☕
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs font-semibold text-[#fcf9f2] truncate">Café de Olla</span>
+                  <span className="text-[11px] text-[#c9c2b5]">Cinnamon & piloncillo</span>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#231d2d] border border-[#ffc174]/10 flex items-center gap-3 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-[#110b1b] flex items-center justify-center text-xl shrink-0">
+                  🎸
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs font-semibold text-[#fcf9f2] truncate">Spanish Guitar</span>
+                  <span className="text-[11px] text-[#c9c2b5]">For Don Mateo's melodies</span>
+                </div>
+              </div>
+
+              <div 
+                onClick={(e) => handleQuickLight(e, 2)}
+                className="p-3 rounded-xl bg-[#2e2738] hover:bg-[#393243] border border-[#f59e0b]/40 transition-colors flex items-center gap-3 shadow-sm cursor-pointer group"
               >
-                <Plus size={14} /> Add Offering
-              </button>
+                <div className="w-10 h-10 rounded-lg bg-[#f59e0b] text-[#110b1b] flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.4)] group-hover:scale-105 transition-transform">
+                  <Flame size={20} />
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs font-bold text-[#ffc174] truncate">Light Veladora</span>
+                  <span className="text-[11px] text-[#c9c2b5]">Offer warm prayer</span>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Portrait Frames on Tier 3 (if any) */}
-          {getMemorialsForTier(3).length > 0 && (
-            <div 
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: 28,
-                flexWrap: 'wrap',
-                margin: '12px 0 20px 0'
-              }}
-            >
-              {getMemorialsForTier(3).map(memorial => (
-                <MemorialFrame 
-                  key={memorial.id} 
-                  memorial={memorial} 
-                  onClick={() => handleFrameClick(memorial)} 
-                />
+            {/* Candle Row on Tier 2 */}
+            <div className="flex justify-around items-end pt-3 border-t border-[#ffc174]/15">
+              {getCandlesForTier(2).map(candle => (
+                <Candle key={candle.id} candle={candle} onToggle={onToggleCandle} size="md" />
               ))}
             </div>
-          )}
+          </div>
+        </section>
 
-          {/* Offerings on Tier 3 */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 18 }}>
-            {getOfferingsForTier(3).map(offering => (
-              <OfferingBadge 
-                key={offering.id} 
-                offering={offering} 
-                visual={getOfferingVisual(offering.type)}
-                onRemove={() => onRemoveOffering(offering.id)} 
-              />
-            ))}
+        {/* ======================================================= */}
+        {/* TIER 3: INFRAMUNDO (Underworld, Roots, Sugar Skulls)      */}
+        {/* ======================================================= */}
+        <section className="w-full flex flex-col items-center relative -mt-3">
+          {/* Overline Marker */}
+          <div className="flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-[#110b1b] border border-[#ffc174]/20 shadow-sm">
+            <span className="text-xs uppercase tracking-widest text-[#ffc174] font-semibold">
+              Tier III • Inframundo & Roots
+            </span>
+            <span className="text-[#a08e7a] text-xs">•</span>
+            <span className="text-xs text-[#c9c2b5]">
+              Mictlán • Marigold Carpet & Calaveras
+            </span>
           </div>
 
-          {/* Bottom Candle Row */}
-          <div 
-            style={{
-              display: 'flex',
-              justifyContent: 'space-around',
-              alignItems: 'flex-end',
-              borderTop: '1px solid rgba(255, 170, 0, 0.2)',
-              paddingTop: 10
-            }}
-          >
-            {getCandlesForTier(3).map(candle => (
-              <Candle key={candle.id} candle={candle} onToggle={onToggleCandle} size="lg" />
-            ))}
-          </div>
+          {/* Tier 3 Base Platform Container */}
+          <div className="w-full rounded-2xl bg-[#110b1b]/95 backdrop-blur-xl p-5 md:p-8 border border-[#ffc174]/20 shadow-[0_24px_60px_rgba(0,0,0,0.85)] flex flex-col gap-6 relative overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              {/* Left: Calaveras de Azúcar & Fruit Bowl */}
+              <div className="md:col-span-4 flex flex-col gap-3">
+                <div className="p-4 rounded-xl bg-[#231d2d] border border-[#ffc174]/10 flex items-center gap-3.5 shadow-sm">
+                  <div className="w-14 h-14 rounded-xl bg-[#be0062] text-white flex items-center justify-center shrink-0 shadow-md text-2xl">
+                    💀
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-serif text-sm font-bold text-[#ffb1c7]">Sugar Skull (Calavera)</span>
+                    <span className="text-[11px] text-[#c9c2b5]">Vivid magenta icing and gold foil</span>
+                    <span className="text-[10px] text-[#ffc174] mt-0.5 uppercase tracking-wider font-semibold">Sweetness before mystery</span>
+                  </div>
+                </div>
 
-          {/* Marigold Petal Carpet at Base */}
-          <div 
-            style={{
-              textAlign: 'center',
-              marginTop: 18,
-              paddingTop: 12,
-              borderTop: '1px dashed rgba(255, 170, 0, 0.25)',
-              color: 'var(--cempasuchil-gold)',
-              fontSize: '0.84rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 10
-            }}
-          >
-            <span>🏵️ 🏵️ 🏵️</span>
-            <span>Marigold Petal Carpet — Guiding souls home with love and remembrance</span>
-            <span>🏵️ 🏵️ 🏵️</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+                <div className="p-4 rounded-xl bg-[#231d2d] border border-[#ffc174]/10 flex items-center gap-3.5 shadow-sm">
+                  <div className="w-14 h-14 rounded-xl bg-[#2e2738] text-[#ffc174] flex items-center justify-center shrink-0 shadow-inner text-2xl">
+                    🍊
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-serif text-sm font-bold text-[#fcf9f2]">Autumn Harvest</span>
+                    <span className="text-[11px] text-[#c9c2b5]">Tangerines, sweet tejocotes, sugarcane</span>
+                    <span className="text-[10px] text-[#a08e7a] mt-0.5 uppercase tracking-wider font-semibold">Family harvest</span>
+                  </div>
+                </div>
+              </div>
 
-// Subcomponent: Memorial Photo Frame
-interface MemorialFrameProps {
-  memorial: MemorialProfile
-  onClick: () => void
-}
+              {/* Center: Tapete de Cempasúchil (Golden Pathway Guiding Spirits) */}
+              <div className="md:col-span-8 flex flex-col justify-center">
+                <div className="relative w-full rounded-2xl p-5 bg-[#2e2738]/60 border border-[#ffc174]/15 shadow-inner flex flex-col overflow-hidden">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2 text-[#ffc174]">
+                      <span className="material-symbols-outlined text-[20px]">flare</span>
+                      <span className="font-serif text-sm md:text-base font-bold text-[#ffc174]">
+                        Marigold Carpet & Pathway (Tapete de Cempasúchil)
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-[#c9c2b5] uppercase tracking-wider font-semibold">
+                      Midnight Guide Light
+                    </span>
+                  </div>
 
-const MemorialFrame: React.FC<MemorialFrameProps> = ({ memorial, onClick }) => {
-  return (
-    <div
-      onClick={onClick}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        cursor: 'pointer',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-        width: 175
-      }}
-      className="memorial-frame-card"
-    >
-      {/* Baroque Wooden & Gold Filigree Frame */}
-      <div 
-        style={{
-          width: 150,
-          height: 180,
-          background: 'linear-gradient(135deg, #d4af37 0%, #aa820a 50%, #f9d976 100%)',
-          padding: 8,
-          borderRadius: 8,
-          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.7), 0 0 16px rgba(255, 180, 0, 0.25)',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-          border: '1px solid #ffe57f'
-        }}
-      >
-        {/* Inner Black Matting */}
-        <div 
-          style={{
-            flex: 1,
-            backgroundColor: '#0d0914',
-            borderRadius: 4,
-            overflow: 'hidden',
-            position: 'relative',
-            border: '2px solid rgba(0,0,0,0.6)'
-          }}
-        >
-          <img 
-            src={memorial.photoUrl} 
-            alt={memorial.name} 
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              filter: 'sepia(25%) contrast(105%) brightness(95%)'
-            }}
-            onError={(e) => {
-              // Fallback to stylized silhouette if image URL fails
-              (e.target as HTMLElement).style.display = 'none'
-            }}
-          />
+                  <p className="text-xs text-[#c9c2b5] mb-4">
+                    Hand-plucked fragrant petals forming the vibrant aromatic golden carpet that guides our loved ones from the veil of the unknown back into our warm home.
+                  </p>
 
-          {/* Subtle Warm Amber Vignette overlay */}
-          <div 
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle, transparent 55%, rgba(0,0,0,0.45) 100%)',
-              pointerEvents: 'none'
-            }} 
-          />
+                  {/* Visual Petal Pathway Nodes */}
+                  <div className="w-full flex items-center justify-between gap-1 p-3 rounded-xl bg-[#110b1b]/90 border border-[#ffc174]/10 shadow-sm">
+                    <div className="flex items-center gap-2 overflow-x-auto py-1 w-full justify-around text-center">
+                      <div className="flex flex-col items-center">
+                        <span className="text-base animate-bounce">🚪</span>
+                        <span className="text-[10px] text-[#c9c2b5] mt-1 font-medium">Doorway</span>
+                      </div>
+                      <div className="h-0.5 w-10 md:w-16 bg-[#f59e0b]/40"></div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-base">🏵️</span>
+                        <span className="text-[10px] text-[#c9c2b5] mt-1 font-medium">Courtyard</span>
+                      </div>
+                      <div className="h-0.5 w-10 md:w-16 bg-[#f59e0b]/40"></div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-base">🕯️</span>
+                        <span className="text-[10px] text-[#ffb1c7] mt-1 font-medium">Threshold</span>
+                      </div>
+                      <div className="h-0.5 w-10 md:w-16 bg-[#f59e0b]/40"></div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-lg">⭐</span>
+                        <span className="text-[10px] text-[#ffc174] mt-1 font-bold">Ofrenda</span>
+                      </div>
+                    </div>
+                  </div>
 
-          {/* Oral History Tape Indicator Badge */}
-          {memorial.oralMemories && memorial.oralMemories.length > 0 && (
-            <div 
-              style={{
-                position: 'absolute',
-                top: 6,
-                right: 6,
-                background: 'rgba(0,0,0,0.75)',
-                color: 'var(--cempasuchil-gold)',
-                borderRadius: '50%',
-                padding: 4,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.5)'
-              }}
-              title={`${memorial.oralMemories.length} oral history recording(s) preserved`}
-            >
-              <Music size={12} />
+                  {/* Floor Vigil Candles */}
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#ffc174]/10">
+                    <div className="flex items-center gap-2">
+                      <div className="flex -space-x-1.5">
+                        <span className="w-3.5 h-3.5 rounded-full bg-[#f59e0b] shadow-[0_0_8px_rgba(245,158,11,0.8)] inline-block"></span>
+                        <span className="w-3.5 h-3.5 rounded-full bg-[#ffc174] shadow-[0_0_8px_rgba(255,193,116,0.8)] inline-block"></span>
+                        <span className="w-3.5 h-3.5 rounded-full bg-[#be0062] shadow-[0_0_8px_rgba(190,0,98,0.8)] inline-block"></span>
+                      </div>
+                      <span className="text-xs text-[#fcf9f2] font-medium">Ash Cross & Blessed Copal</span>
+                    </div>
+                    <span className="text-xs text-[#a08e7a]">Protection & Eternal Peace</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
 
-          {/* Calaverita Tag Badge */}
-          {memorial.calaverita && (
-            <div 
-              style={{
-                position: 'absolute',
-                bottom: 6,
-                left: 6,
-                background: 'rgba(233, 30, 99, 0.85)',
-                color: '#ffffff',
-                borderRadius: 4,
-                padding: '2px 5px',
-                fontSize: '0.65rem',
-                fontWeight: 700,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 3
-              }}
-              title="Calaverita Literaria attached"
-            >
-              <span>💀 Verse</span>
+            {/* Candle Row on Tier 3 */}
+            <div className="flex justify-around items-end pt-4 border-t border-[#ffc174]/15">
+              {getCandlesForTier(3).map(candle => (
+                <Candle key={candle.id} candle={candle} onToggle={onToggleCandle} size="lg" />
+              ))}
             </div>
-          )}
-        </div>
-
-        {/* Small Ribbon/Marigold at Top Corner */}
-        <div 
-          style={{
-            position: 'absolute',
-            top: -6,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            fontSize: '1rem',
-            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))'
-          }}
-        >
-          🏵️
-        </div>
+          </div>
+        </section>
       </div>
 
-      {/* Name and Relation Label Plate */}
-      <div 
-        style={{
-          marginTop: 8,
-          textAlign: 'center',
-          width: '100%'
-        }}
-      >
-        <div 
-          className="font-serif" 
-          style={{ 
-            color: 'var(--text-gold)', 
-            fontWeight: 700, 
-            fontSize: '0.9rem',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
-        >
-          {memorial.name}
-        </div>
-        <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
-          {memorial.relation}
-        </div>
-        <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontStyle: 'italic' }}>
-          {memorial.birthYear} — {memorial.passingYear}
-        </div>
-      </div>
-    </div>
-  )
-}
+      {/* ========================================================================= */}
+      {/* FLOATING SACRED ACTION DOCK (STICKY BOTTOM CONTROLS)                      */}
+      {/* ========================================================================= */}
+      <aside className="fixed bottom-6 z-40 w-full px-4 flex justify-center pointer-events-none">
+        <div className="pointer-events-auto p-2 rounded-2xl bg-[#110b1b]/95 backdrop-blur-2xl border border-[#ffc174]/25 shadow-[0_16px_50px_rgba(0,0,0,0.85)] flex flex-wrap items-center justify-center gap-2 max-w-2xl">
+          {/* Primary Action: + Place a Loved One */}
+          <button 
+            onClick={() => onOpenNewMemorial(1)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#ffc174] to-[#f59e0b] text-[#110b1b] font-bold text-xs hover:brightness-110 transition-all shadow-[0_0_20px_rgba(245,158,11,0.35)] active:scale-95"
+            type="button"
+          >
+            <Plus size={16} />
+            <span>Place Loved One</span>
+          </button>
 
-// Subcomponent: Offering Badge on the Altar
-interface OfferingBadgeProps {
-  offering: AltarOffering
-  visual: { icon: string; color: string }
-  onRemove: () => void
-}
+          {/* Action 2: Offer an Element */}
+          <button 
+            onClick={() => onOpenOfferingModal(2)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#2e2738] text-[#fcf9f2] font-semibold text-xs hover:bg-[#393243] hover:text-[#ffc174] border border-[#ffc174]/15 transition-all active:scale-95"
+            type="button"
+          >
+            <span className="text-sm">🏵️</span>
+            <span>Place Offering</span>
+          </button>
 
-const OfferingBadge: React.FC<OfferingBadgeProps> = ({ offering, visual, onRemove }) => {
-  return (
-    <div 
-      className="offering-chip"
-      title={`${offering.name}: ${offering.symbolicMeaning} (Click X to remove)`}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 6,
-        padding: '5px 12px',
-        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-        border: '1px solid rgba(255, 255, 255, 0.12)',
-        borderRadius: 20,
-        fontSize: '0.82rem',
-        color: 'var(--text-primary)',
-        backdropFilter: 'blur(8px)',
-        position: 'relative'
-      }}
-    >
-      <span style={{ fontSize: '1.05rem' }}>{visual.icon}</span>
-      <span style={{ fontWeight: 500 }}>{offering.name}</span>
-      <button 
-        onClick={(e) => {
-          e.stopPropagation()
-          onRemove()
-        }}
-        style={{
-          background: 'none',
-          border: 'none',
-          color: 'var(--text-muted)',
-          cursor: 'pointer',
-          padding: '0 2px',
-          fontSize: '0.85rem'
-        }}
-        title="Remove offering from altar"
-      >
-        ×
-      </button>
+          {/* Action 3: Light Candle */}
+          <button 
+            onClick={(e) => handleQuickLight(e, 1)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#2e2738] text-[#fcf9f2] font-semibold text-xs hover:bg-[#393243] hover:text-[#ffc174] border border-[#ffc174]/15 transition-all active:scale-95"
+            type="button"
+          >
+            <Flame size={14} className="text-[#f59e0b]" />
+            <span>Dedicate Flame</span>
+          </button>
+
+          {/* Action 4: Offline Sanctuary Pill */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1f1929] text-[#c9c2b5] text-xs border border-[#ffc174]/10">
+            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>100% Offline Sanctuary</span>
+          </div>
+        </div>
+      </aside>
     </div>
   )
 }

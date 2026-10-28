@@ -65,192 +65,143 @@ export const Header: React.FC<HeaderProps> = ({
   ]
 
   return (
-    <header style={{ width: '100%', position: 'relative', zIndex: 20 }}>
-      {/* Fluttering Papel Picado String Banner */}
-      <div className="papel-banner" aria-hidden="true">
-        {papelItems.map((item, idx) => (
-          <div
-            key={idx}
-            className="papel-flag"
-            style={{
-              backgroundColor: item.bg,
-              animationDelay: `${idx * 0.18}s`
-            }}
-          >
-            <span>{item.symbol}</span>
+    <header className="fixed top-0 w-full z-50 bg-[#161020]/90 backdrop-blur-xl border-b border-[#ffc174]/15 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      {/* Traditional Scalloped Papel Picado Ribbon */}
+      <div className="w-full flex items-center justify-between px-3 overflow-hidden h-3 bg-[#110b1b] border-b border-[#ffc174]/10 select-none">
+        <div className="flex items-center gap-2 w-full justify-around opacity-85">
+          <div className="w-8 h-3 rounded-b-sm bg-[#be0062] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
           </div>
-        ))}
+          <div className="w-8 h-3 rounded-b-sm bg-[#f59e0b] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#5f258e] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#be0062] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#f59e0b] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#5f258e] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#be0062] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#f59e0b] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#5f258e] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#be0062] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#f59e0b] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+          <div className="w-8 h-3 rounded-b-sm bg-[#5f258e] relative flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#110b1b]"></div>
+          </div>
+        </div>
       </div>
 
-      {/* Main Glassmorphic Navigation Bar */}
-      <div 
-        className="glass-panel" 
-        style={{
-          margin: '18px 24px 0 24px',
-          padding: '18px 26px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 16
-        }}
-      >
-        <div 
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 16
-          }}
-        >
-          {/* Brand & Theme Title */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <h1 
-                className="font-display text-gold-gradient" 
-                style={{ 
-                  fontSize: '1.9rem', 
-                  letterSpacing: '0.04em',
-                  fontWeight: 900
-                }}
-              >
-                OFRENDA DIGITAL
-              </h1>
-              <span className="badge-gold">
-                <Flame size={13} /> Día de los Muertos
-              </span>
-              <span className="badge-gemma" title="Powered by Google Gemma open-weight models">
-                <Sparkles size={13} /> Gemma 2 ({activeModelName})
-              </span>
-              <span className="badge-offline" title="Zero cloud telemetry - your family stories remain 100% on your machine">
-                <ShieldCheck size={13} /> {isOllamaConnected ? 'Local Ollama' : 'Offline Sanctuary'}
-              </span>
+      {/* Main Sanctuary Navigation Bar */}
+      <div className="h-16 w-full px-4 md:px-8 flex items-center justify-between gap-4">
+        {/* Brand & Emblem */}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#f59e0b] via-[#be0062] to-[#ffc174] p-0.5 shadow-[0_0_16px_rgba(245,158,11,0.4)] flex items-center justify-center">
+            <div className="w-full h-full rounded-[10px] bg-[#161020] flex items-center justify-center text-lg">
+              🕯️
             </div>
-            <p 
-              style={{ 
-                color: 'var(--text-secondary)', 
-                fontSize: '0.88rem', 
-                marginTop: 4,
-                fontStyle: 'italic'
-              }}
-            >
-              "Ghost in the Machine" — A private, candlelit sanctuary preserving ancestral voices, memories, and calaveritas without cloud lock-in.
-            </p>
           </div>
-
-          {/* Action Callouts */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            <button 
-              className="btn-primary" 
-              onClick={onOpenNewMemorial}
-              title="Add a beloved departed family member or friend to the altar"
-            >
-              <Plus size={16} /> Add to Ofrenda
-            </button>
-
-            <button 
-              className="btn-secondary" 
-              onClick={onOpenWhyOpenMatters}
-              style={{
-                borderColor: 'rgba(255, 170, 0, 0.45)',
-                background: 'linear-gradient(135deg, rgba(255, 170, 0, 0.12), rgba(156, 39, 176, 0.12))'
-              }}
-              title="Read why open-source AI is critical for intimate memorials"
-            >
-              <ShieldCheck size={16} color="var(--cempasuchil-gold)" /> Why Open Matters
-            </button>
+          <div className="flex flex-col">
+            <span className="font-serif text-lg md:text-xl font-bold tracking-wide leading-tight text-[#ffc174]">
+              Ofrenda Digital
+            </span>
+            <span className="text-[10px] md:text-xs text-[#c9c2b5] uppercase tracking-widest font-medium">
+              Local AI Día de los Muertos Sanctuary
+            </span>
           </div>
         </div>
 
-        {/* Altar Quick Control Toolbar */}
-        <div 
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            paddingTop: 12,
-            flexWrap: 'wrap',
-            gap: 12
-          }}
-        >
-          {/* Sensory toggles (Audio & Ambient Petals) */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button 
-              className="btn-ghost" 
-              onClick={handleToggleMusic}
-              style={{
-                color: isAudioPlaying ? 'var(--text-gold)' : 'var(--text-muted)',
-                backgroundColor: isAudioPlaying ? 'rgba(255, 170, 0, 0.12)' : 'transparent'
-              }}
-              title="Toggle meditative Spanish acoustic guitar & altar chimes"
-            >
-              <Music size={15} />
-              <span>{isAudioPlaying ? 'Playing Ambient Strings' : 'Play Altar Ambience'}</span>
-            </button>
+        {/* Centered Navigation Pills (Desktop) */}
+        <nav className="hidden lg:flex items-center gap-1 p-1 rounded-xl bg-[#1f1929] border border-[#ffc174]/15">
+          <button 
+            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#2e2738] text-[#ffc174] shadow-sm flex items-center gap-1.5 transition-all"
+            type="button"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>
+            <span>Main Altar</span>
+          </button>
+          <button 
+            onClick={onOpenNewMemorial}
+            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-[#c9c2b5] hover:text-[#ffc174] hover:bg-[#231d2d] transition-all flex items-center gap-1.5"
+            type="button"
+          >
+            <span>+ Place Loved One</span>
+          </button>
+          <button 
+            onClick={onOpenWhyOpenMatters}
+            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-[#c9c2b5] hover:text-[#ffc174] hover:bg-[#231d2d] transition-all flex items-center gap-1.5"
+            type="button"
+          >
+            <span>Gemma AI Sanctuary</span>
+          </button>
+        </nav>
 
-            <button 
-              className="btn-ghost" 
-              onClick={handleToggleMute}
-              title={isMuted ? 'Unmute chimes and bell sounds' : 'Mute all sounds'}
-            >
-              {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-              <span>{isMuted ? 'Muted' : 'Sound On'}</span>
-            </button>
+        {/* Right Sensory & Action Controls */}
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* Ambient Guitar Toggle Pill */}
+          <button 
+            onClick={handleToggleMusic}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+              isAudioPlaying 
+                ? 'bg-[#2e2738] text-[#ffc174] border-[#f59e0b]/50 shadow-[0_0_14px_rgba(245,158,11,0.25)]' 
+                : 'bg-[#1f1929] text-[#c9c2b5] border-[#ffc174]/15 hover:text-[#ffc174]'
+            }`}
+            title="Toggle meditative Spanish acoustic guitar & ambient strings"
+            type="button"
+          >
+            <Music size={14} className={isAudioPlaying ? 'animate-bounce text-[#f59e0b]' : ''} />
+            <span className="hidden sm:inline">
+              {isAudioPlaying ? 'Ambient Guitar' : 'Play Strings'}
+            </span>
+          </button>
 
-            <button 
-              className="btn-ghost" 
-              onClick={onTogglePetals}
-              style={{
-                color: petalsActive ? 'var(--cempasuchil-gold)' : 'var(--text-muted)'
-              }}
-              title="Toggle falling golden marigold (cempasúchil) petals"
-            >
-              <Sparkles size={15} />
-              <span>Petals: {petalsActive ? 'Drifting' : 'Paused'}</span>
-            </button>
-          </div>
+          {/* Sound Mute Toggle */}
+          <button
+            onClick={handleToggleMute}
+            className="p-1.5 rounded-full bg-[#1f1929] text-[#c9c2b5] hover:text-[#ffc174] border border-[#ffc174]/15 transition-colors"
+            title={isMuted ? 'Unmute sounds' : 'Mute sound effects'}
+            type="button"
+          >
+            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+          </button>
 
-          {/* Candle & Capsule Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            {allCandlesLit ? (
-              <button 
-                className="btn-ghost" 
-                onClick={onExtinguishAllCandles}
-                title="Extinguish all altar candles"
-              >
-                <Flame size={15} color="var(--text-muted)" />
-                <span>Extinguish All</span>
-              </button>
-            ) : (
-              <button 
-                className="btn-ghost" 
-                onClick={onLightAllCandles}
-                style={{ color: 'var(--cempasuchil-gold)' }}
-                title="Light all candles across the 3 tiers"
-              >
-                <Flame size={15} color="var(--cempasuchil-gold)" />
-                <span>Light All Candles</span>
-              </button>
-            )}
+          {/* Gemma 2B Offline Status Badge */}
+          <button
+            onClick={onOpenGemmaConfig}
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1f1929] text-[#ffc174] text-xs font-medium border border-[#ffc174]/20 shadow-[0_0_12px_rgba(245,158,11,0.15)] hover:border-[#f59e0b]/60 transition-all cursor-pointer"
+            title="Click to configure local Ollama endpoint"
+            type="button"
+          >
+            <span className={`w-2 h-2 rounded-full ${isOllamaConnected ? 'bg-emerald-400' : 'bg-[#f59e0b]'} animate-pulse`}></span>
+            <span>{isOllamaConnected ? `Gemma (${activeModelName})` : 'Gemma 2B Offline • 100% Private'}</span>
+          </button>
 
-            <button 
-              className="btn-ghost" 
-              onClick={onOpenCapsuleModal}
-              title="Export or Import offline Memory Capsules (JSON)"
-            >
-              <Download size={15} />
-              <span>Memory Capsule</span>
-            </button>
-
-            <button 
-              className="btn-ghost" 
-              onClick={onOpenGemmaConfig}
-              title="Configure local Ollama endpoint or Gemma model parameters"
-            >
-              <Settings size={15} />
-              <span>AI Engine</span>
-            </button>
-          </div>
+          {/* Export Capsule Button */}
+          <button 
+            onClick={onOpenCapsuleModal}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#ffc174] text-[#161020] font-semibold text-xs hover:bg-[#f59e0b] transition-all shadow-[0_0_18px_rgba(255,193,116,0.3)]"
+            title="Export or import offline Memory Capsule"
+            type="button"
+          >
+            <Download size={14} />
+            <span className="hidden md:inline">Export Capsule</span>
+          </button>
         </div>
       </div>
     </header>

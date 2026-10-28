@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { MemorialProfile, OralMemory } from '../types'
 import { gemmaService } from '../services/gemmaService'
 import { soundService } from '../services/soundService'
-import { X, Sparkles, Mic, MicOff, BookOpen, Music, Heart, MessageSquare, Flame, Check, RefreshCw, Printer } from 'lucide-react'
+import { X, Sparkles, Mic, MicOff, BookOpen, Music, Heart, MessageSquare, Flame, Check, RefreshCw, Printer, Copy, Save, Share2 } from 'lucide-react'
 
 interface MemorialModalProps {
   memorial: MemorialProfile
@@ -11,7 +11,7 @@ interface MemorialModalProps {
   onDeleteMemorial: (id: string) => void
 }
 
-type TabType = 'overview' | 'oral-history' | 'calaverita' | 'letter' | 'wisdom'
+type TabType = 'oral-history' | 'calaverita' | 'letter' | 'wisdom'
 
 export const MemorialModal: React.FC<MemorialModalProps> = ({
   memorial,
@@ -19,14 +19,23 @@ export const MemorialModal: React.FC<MemorialModalProps> = ({
   onUpdateMemorial,
   onDeleteMemorial
 }) => {
-  const [activeTab, setActiveTab] = useState<TabType>('overview')
+  const [activeTab, setActiveTab] = useState<TabType>('oral-history')
   const [isGenerating, setIsGenerating] = useState<boolean>(false)
   const [latencyNote, setLatencyNote] = useState<string | null>(null)
+  const [copiedState, setCopiedState] = useState<boolean>(false)
 
   // Oral history recording state
   const [selectedTopic, setSelectedTopic] = useState<string>('The sound of their laughter')
   const [oralTranscript, setOralTranscript] = useState<string>('')
   const [isListening, setIsListening] = useState<boolean>(false)
+  const [recordingSeconds, setRecordingSeconds] = useState<number>(0)
+
+  // Calaverita state
+  const [calaveritaTone, setCalaveritaTone] = useState<'festive' | 'tender' | 'classic'>('festive')
+
+  // Letter state
+  const [letterIntention, setLetterIntention] = useState<string>('Gratitude & Blessing')
+  const [letterDraft, setLetterDraft] = useState<string>(memorial.remembranceLetter || '')
 
   // Channeling wisdom state
   const [wisdomPrompt, setWisdomPrompt] = useState<string>('What should I remember when life feels overwhelming?')
@@ -53,7 +62,10 @@ export const MemorialModal: React.FC<MemorialModalProps> = ({
       recognition.interimResults = true
       recognition.lang = 'en-US'
 
-      recognition.onstart = () => setIsListening(true)
+      recognition.onstart = () => {
+        setIsListening(true)
+        setRecordingSeconds(1)
+      }
       recognition.onend = () => setIsListening(false)
       recognition.onerror = () => setIsListening(false)
 
@@ -126,6 +138,7 @@ export const MemorialModal: React.FC<MemorialModalProps> = ({
     setLatencyNote(null)
 
     const result = await gemmaService.generateRemembranceLetter(memorial)
+    setLetterDraft(result.text)
     const updated = {
       ...memorial,
       remembranceLetter: result.text
@@ -160,615 +173,496 @@ export const MemorialModal: React.FC<MemorialModalProps> = ({
     onUpdateMemorial(updated)
   }
 
+  const handleCopyText = (text: string) => {
+    navigator.clipboard.writeText(text)
+    setCopiedState(true)
+    setTimeout(() => setCopiedState(false), 2000)
+  }
+
   const promptOptions = [
     'The sound of their laughter',
     'Their secret kitchen recipe',
-    'A quiet rainy afternoon together',
+    'A quiet afternoon together',
     'The best life advice they gave me',
-    'A memory of them singing or working with their hands'
+    'A memory of them working with their hands'
   ]
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div 
-        className="modal-content"
+    <div className="fixed inset-0 z-50 flex justify-end bg-[#110b1b]/80 backdrop-blur-md transition-opacity duration-300" onClick={onClose}>
+      {/* Deep Velvet Slide-Over Sanctuary Drawer */}
+      <aside 
         onClick={e => e.stopPropagation()}
-        style={{ maxWidth: 740 }}
+        className="w-full max-w-[700px] h-full overflow-y-auto bg-[#161020]/95 backdrop-blur-2xl border-l border-[#ffc174]/20 shadow-2xl flex flex-col relative z-20 text-[#fcf9f2]"
       >
-        {/* Modal Header */}
-        <div 
-          style={{
-            padding: '20px 26px 14px 26px',
-            borderBottom: '1px solid rgba(255, 170, 0, 0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            background: 'linear-gradient(135deg, rgba(255, 170, 0, 0.1), rgba(0,0,0,0.4))'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: '1.6rem' }}>🏵️</span>
-            <div>
-              <h2 className="font-serif text-gold-gradient" style={{ fontSize: '1.3rem' }}>
-                {memorial.name}
-              </h2>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                {memorial.relation} • {memorial.birthYear} — {memorial.passingYear}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button 
-              className="btn-ghost" 
-              onClick={() => window.print()}
-              title="Print memorial card"
-            >
-              <Printer size={16} />
-            </button>
-            <button 
-              className="btn-ghost" 
-              onClick={onClose}
-              style={{ fontSize: '1.2rem', padding: '4px 8px' }}
-            >
-              <X size={18} />
-            </button>
+        {/* Top Papel Picado Garland Trim */}
+        <div className="w-full flex items-center justify-between px-4 py-1 bg-[#110b1b] opacity-90 select-none border-b border-[#ffc174]/10">
+          <div className="flex items-center gap-2 w-full justify-around">
+            <span className="h-2 w-5 rounded-b-sm bg-[#be0062]"></span>
+            <span className="h-2 w-5 rounded-b-sm bg-[#f59e0b]"></span>
+            <span className="h-2 w-5 rounded-b-sm bg-[#5f258e]"></span>
+            <span className="h-2 w-5 rounded-b-sm bg-[#ffc174]"></span>
+            <span className="h-2 w-5 rounded-b-sm bg-[#be0062]"></span>
+            <span className="h-2 w-5 rounded-b-sm bg-[#f59e0b]"></span>
+            <span className="h-2 w-5 rounded-b-sm bg-[#5f258e]"></span>
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div 
-          style={{
-            display: 'flex',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            padding: '0 16px',
-            overflowX: 'auto',
-            gap: 4
-          }}
-        >
+        {/* Header Section: Ancestor Medallion & Metadata */}
+        <div className="p-6 md:p-8 bg-gradient-to-b from-[#2e2738]/90 to-transparent relative border-b border-[#ffc174]/15">
+          {/* Close Button */}
           <button 
-            className="btn-ghost"
-            onClick={() => setActiveTab('overview')}
-            style={{
-              borderBottom: activeTab === 'overview' ? '2px solid var(--cempasuchil-gold)' : '2px solid transparent',
-              color: activeTab === 'overview' ? 'var(--text-gold)' : 'var(--text-secondary)',
-              borderRadius: 0,
-              padding: '12px 14px'
-            }}
+            onClick={onClose}
+            className="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#1f1929] hover:bg-[#2e2738] text-[#c9c2b5] hover:text-[#ffc174] border border-[#ffc174]/15 transition-all flex items-center justify-center shadow-lg group"
+            title="Close sanctuary modal"
+            type="button"
           >
-            <Heart size={14} /> Spirit & Life
+            <X size={18} className="group-hover:rotate-90 transition-transform duration-300" />
           </button>
 
-          <button 
-            className="btn-ghost"
-            onClick={() => setActiveTab('oral-history')}
-            style={{
-              borderBottom: activeTab === 'oral-history' ? '2px solid var(--cempasuchil-gold)' : '2px solid transparent',
-              color: activeTab === 'oral-history' ? 'var(--text-gold)' : 'var(--text-secondary)',
-              borderRadius: 0,
-              padding: '12px 14px'
-            }}
-          >
-            <Mic size={14} /> Oral Histories ({memorial.oralMemories?.length || 0})
-          </button>
-
-          <button 
-            className="btn-ghost"
-            onClick={() => setActiveTab('calaverita')}
-            style={{
-              borderBottom: activeTab === 'calaverita' ? '2px solid var(--cempasuchil-gold)' : '2px solid transparent',
-              color: activeTab === 'calaverita' ? 'var(--text-gold)' : 'var(--text-secondary)',
-              borderRadius: 0,
-              padding: '12px 14px'
-            }}
-          >
-            <Sparkles size={14} /> Calaverita Literaria
-          </button>
-
-          <button 
-            className="btn-ghost"
-            onClick={() => setActiveTab('letter')}
-            style={{
-              borderBottom: activeTab === 'letter' ? '2px solid var(--cempasuchil-gold)' : '2px solid transparent',
-              color: activeTab === 'letter' ? 'var(--text-gold)' : 'var(--text-secondary)',
-              borderRadius: 0,
-              padding: '12px 14px'
-            }}
-          >
-            <BookOpen size={14} /> Altar Letter
-          </button>
-
-          <button 
-            className="btn-ghost"
-            onClick={() => setActiveTab('wisdom')}
-            style={{
-              borderBottom: activeTab === 'wisdom' ? '2px solid var(--cempasuchil-gold)' : '2px solid transparent',
-              color: activeTab === 'wisdom' ? 'var(--text-gold)' : 'var(--text-secondary)',
-              borderRadius: 0,
-              padding: '12px 14px'
-            }}
-          >
-            <MessageSquare size={14} /> Ask Ancestor
-          </button>
-        </div>
-
-        {/* Tab Body */}
-        <div style={{ padding: '24px 28px' }}>
-          {/* Latency / Gemma feedback note */}
-          {latencyNote && (
-            <div 
-              style={{
-                marginBottom: 16,
-                padding: '8px 14px',
-                borderRadius: 8,
-                background: 'rgba(66, 133, 244, 0.12)',
-                border: '1px solid rgba(66, 133, 244, 0.3)',
-                color: '#8ab4f8',
-                fontSize: '0.8rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6
-              }}
-            >
-              <Sparkles size={13} />
-              <span>{latencyNote}</span>
-            </div>
-          )}
-
-          {/* TAB 1: OVERVIEW */}
-          {activeTab === 'overview' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-                {/* Portrait */}
-                <div 
-                  style={{
-                    width: 140,
-                    height: 170,
-                    borderRadius: 8,
-                    overflow: 'hidden',
-                    border: '2px solid var(--cempasuchil-gold)',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
-                    flexShrink: 0
-                  }}
-                >
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+            {/* Portrait in Antique Filigree Medallion with Radiant Glow */}
+            <div className="relative shrink-0">
+              <div className="absolute -inset-2 rounded-full bg-[#f59e0b]/25 blur-md animate-pulse"></div>
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full p-1 bg-gradient-to-br from-[#ffc174] via-[#f59e0b] to-[#be0062] shadow-[0_0_30px_rgba(245,158,11,0.35)]">
+                <div className="w-full h-full rounded-full overflow-hidden bg-[#110b1b]">
                   <img 
                     src={memorial.photoUrl} 
                     alt={memorial.name} 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-
-                {/* Details */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <p 
-                    className="font-serif" 
-                    style={{ 
-                      fontSize: '1.05rem', 
-                      color: 'var(--text-primary)', 
-                      fontStyle: 'italic',
-                      lineHeight: 1.5 
-                    }}
-                  >
-                    "{memorial.epitaph}"
-                  </p>
-
-                  {memorial.favoriteSaying && (
-                    <div 
-                      style={{
-                        padding: '10px 14px',
-                        background: 'rgba(255, 170, 0, 0.08)',
-                        borderLeft: '3px solid var(--cempasuchil-gold)',
-                        borderRadius: '0 8px 8px 0'
-                      }}
-                    >
-                      <div style={{ fontSize: '0.75rem', color: 'var(--cempasuchil-gold)', fontWeight: 600 }}>
-                        THEIR FAVORITE SAYING
-                      </div>
-                      <div style={{ fontSize: '0.88rem', color: 'var(--text-primary)', marginTop: 2 }}>
-                        "{memorial.favoriteSaying}"
-                      </div>
-                    </div>
-                  )}
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 4 }}>
-                    <button 
-                      className="btn-primary" 
-                      onClick={handleLightCandleForThem}
-                      style={{ padding: '8px 16px', fontSize: '0.88rem' }}
-                    >
-                      <Flame size={15} /> Light Altar Candle ({memorial.candlesLitCount || 0} Lit)
-                    </button>
-                  </div>
-                </div>
               </div>
-
-              {/* Favorites Grid */}
-              <div 
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                  gap: 14,
-                  marginTop: 10
-                }}
-              >
-                <div className="glass-panel" style={{ padding: '12px 16px' }}>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--cempasuchil-gold)', fontWeight: 600, marginBottom: 4 }}>
-                    FAVORITE FOODS ON ALTAR
-                  </div>
-                  <div style={{ fontSize: '0.86rem', color: 'var(--text-secondary)' }}>
-                    {memorial.favoriteFoods.join(' • ') || 'None listed'}
-                  </div>
-                </div>
-
-                <div className="glass-panel" style={{ padding: '12px 16px' }}>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--cempasuchil-gold)', fontWeight: 600, marginBottom: 4 }}>
-                    CHERISHED SONGS & MELODIES
-                  </div>
-                  <div style={{ fontSize: '0.86rem', color: 'var(--text-secondary)' }}>
-                    {memorial.favoriteSongs.join(' • ') || 'None listed'}
-                  </div>
-                </div>
-
-                <div className="glass-panel" style={{ padding: '12px 16px' }}>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--cempasuchil-gold)', fontWeight: 600, marginBottom: 4 }}>
-                    PASSIONS & HOBBIES
-                  </div>
-                  <div style={{ fontSize: '0.86rem', color: 'var(--text-secondary)' }}>
-                    {memorial.hobbies.join(' • ') || 'None listed'}
-                  </div>
-                </div>
-              </div>
-
-              {/* Danger Zone: Remove from altar */}
-              <div style={{ marginTop: 20, textAlign: 'right' }}>
-                <button 
-                  className="btn-ghost" 
-                  onClick={() => {
-                    if (confirm(`Are you sure you want to remove ${memorial.name} from this altar?`)) {
-                      onDeleteMemorial(memorial.id)
-                      onClose()
-                    }
-                  }}
-                  style={{ color: '#ef5350', fontSize: '0.8rem' }}
-                >
-                  Remove Portrait from Altar
-                </button>
+              <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#110b1b] border border-[#f59e0b]/40 flex items-center justify-center shadow-md">
+                <Flame size={14} className="text-[#f59e0b]" />
               </div>
             </div>
-          )}
 
-          {/* TAB 2: ORAL HISTORIES & VOICE PRESERVER */}
-          {activeTab === 'oral-history' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <div 
-                style={{
-                  padding: '14px 18px',
-                  background: 'rgba(255, 170, 0, 0.08)',
-                  borderRadius: 12,
-                  border: '1px solid rgba(255, 170, 0, 0.2)'
-                }}
+            {/* Ancestor Details & Moniker */}
+            <div className="flex flex-col items-center sm:items-start text-center sm:text-left min-w-0 flex-1">
+              <span className="text-[10px] uppercase tracking-widest text-[#ffc174] font-semibold mb-1">
+                Sacred Sanctuary • Family Ofrenda
+              </span>
+              <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#fcf9f2] leading-tight">
+                {memorial.name}
+              </h2>
+              <p className="text-xs text-[#c9c2b5] mt-0.5 flex items-center gap-1.5 flex-wrap justify-center sm:justify-start">
+                <span>{memorial.relation}</span>
+                <span>•</span>
+                <span>{memorial.birthYear} — {memorial.passingYear}</span>
+              </p>
+
+              {/* Memory Chips */}
+              <div className="flex flex-wrap gap-1.5 my-2.5 justify-center sm:justify-start">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#2e2738] border border-[#ffc174]/15 text-[#ffc174] text-[10px] font-semibold uppercase">
+                  Tier {memorial.tierPosition} Altar
+                </span>
+                {memorial.favoriteFoods && memorial.favoriteFoods.length > 0 && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#2e2738] border border-[#ffb1c7]/15 text-[#ffb1c7] text-[10px] font-semibold uppercase">
+                    Favorite: {memorial.favoriteFoods[0]}
+                  </span>
+                )}
+                <span className="px-2.5 py-0.5 rounded-full bg-[#2e2738] border border-[#e4bfff]/15 text-[#e4bfff] text-[10px] font-semibold uppercase">
+                  {memorial.oralMemories?.length || 0} Oral Histories
+                </span>
+              </div>
+
+              {/* Dedicated Candle Toggle Action */}
+              <button 
+                onClick={handleLightCandleForThem}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1f1929] hover:bg-[#2e2738] border border-[#f59e0b]/40 text-[#ffc174] text-xs font-semibold shadow-md transition-all active:scale-95"
+                type="button"
               >
-                <h4 style={{ color: 'var(--text-gold)', fontSize: '0.96rem', marginBottom: 4 }}>
-                  🎙️ Preserve Memories in Your Own Voice
-                </h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem' }}>
-                  Tell an intimate story about {memorial.name}. Speak into your microphone or type your memories. Gemma's open-source model synthesizes spoken stream-of-consciousness into a lasting biographical prose capsule.
+                <Flame size={14} className="text-[#f59e0b] animate-bounce" />
+                <span>Light a Dedicated Candle ({memorial.candlesLitCount || 0})</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabbed Navigation Bar */}
+        <div className="px-6 md:px-8 pt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 rounded-xl bg-[#110b1b] border border-[#ffc174]/15 select-none">
+            <button 
+              onClick={() => setActiveTab('oral-history')}
+              className={`px-2 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                activeTab === 'oral-history' 
+                  ? 'bg-[#2e2738] text-[#ffc174] shadow-sm border border-[#ffc174]/30' 
+                  : 'text-[#c9c2b5] hover:text-[#fcf9f2] hover:bg-[#1f1929]'
+              }`}
+              type="button"
+            >
+              <Sparkles size={14} />
+              <span className="truncate">Oral History</span>
+            </button>
+
+            <button 
+              onClick={() => setActiveTab('calaverita')}
+              className={`px-2 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                activeTab === 'calaverita' 
+                  ? 'bg-[#2e2738] text-[#ffc174] shadow-sm border border-[#ffc174]/30' 
+                  : 'text-[#c9c2b5] hover:text-[#fcf9f2] hover:bg-[#1f1929]'
+              }`}
+              type="button"
+            >
+              <span className="text-xs">💀</span>
+              <span className="truncate">Calaverita</span>
+            </button>
+
+            <button 
+              onClick={() => setActiveTab('letter')}
+              className={`px-2 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                activeTab === 'letter' 
+                  ? 'bg-[#2e2738] text-[#ffc174] shadow-sm border border-[#ffc174]/30' 
+                  : 'text-[#c9c2b5] hover:text-[#fcf9f2] hover:bg-[#1f1929]'
+              }`}
+              type="button"
+            >
+              <BookOpen size={14} />
+              <span className="truncate">Altar Letter</span>
+            </button>
+
+            <button 
+              onClick={() => setActiveTab('wisdom')}
+              className={`px-2 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                activeTab === 'wisdom' 
+                  ? 'bg-[#2e2738] text-[#ffc174] shadow-sm border border-[#ffc174]/30' 
+                  : 'text-[#c9c2b5] hover:text-[#fcf9f2] hover:bg-[#1f1929]'
+              }`}
+              type="button"
+            >
+              <Heart size={14} />
+              <span className="truncate">Wisdom</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Latency / Engine Feedback Badge */}
+        {latencyNote && (
+          <div className="mx-6 md:mx-8 mt-3 px-3 py-1.5 rounded-lg bg-[#2e2738] border border-[#ffc174]/20 text-[11px] text-[#ffc174] flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span>{latencyNote}</span>
+          </div>
+        )}
+
+        {/* ======================================================= */}
+        {/* TAB 1: ORAL HISTORY WEAVER                               */}
+        {/* ======================================================= */}
+        {activeTab === 'oral-history' && (
+          <div className="p-6 md:p-8 flex flex-col gap-6 flex-1">
+            {/* Gemma 2B Offline Privacy Banner */}
+            <div className="p-4 rounded-xl bg-gradient-to-r from-[#231d2d] via-[#2e2738] to-[#231d2d] border border-[#ffc174]/15 flex items-start gap-3 shadow-md">
+              <div className="w-9 h-9 rounded-full bg-[#f59e0b] text-[#110b1b] flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.35)]">
+                <Sparkles size={18} />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-[#ffc174]">Gemma 2B Vault Local</span>
+                  <span className="px-2 py-0.5 rounded-full bg-[#f59e0b]/20 text-[#ffc174] text-[10px] font-semibold">
+                    100% On-Device & Private
+                  </span>
+                </div>
+                <p className="text-xs text-[#c9c2b5] leading-relaxed mt-0.5">
+                  Speak or type conversational memories. Open-weight Gemma synthesizes spoken fragments into enduring literary prose capsules completely offline.
                 </p>
               </div>
+            </div>
 
-              {/* Prompt Topic Selector */}
-              <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>
-                  Choose Memory Theme:
-                </label>
-                <select 
-                  value={selectedTopic} 
-                  onChange={e => setSelectedTopic(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '8px 12px',
-                    borderRadius: 8,
-                    background: '#1d1728',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    color: 'var(--text-primary)',
-                    fontFamily: 'inherit'
-                  }}
-                >
-                  {promptOptions.map(p => (
-                    <option key={p} value={p}>{p}</option>
-                  ))}
-                </select>
+            {/* Voice Recording Station */}
+            <div className="p-5 rounded-2xl bg-[#1f1929] border border-[#ffc174]/15 shadow-xl flex flex-col items-center text-center relative overflow-hidden">
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#2e2738] text-[#ffc174] text-xs font-medium mb-4 shadow-sm">
+                <span className={`w-2.5 h-2.5 rounded-full ${isListening ? 'bg-[#be0062] animate-ping' : 'bg-emerald-400'}`}></span>
+                <span>{isListening ? 'Listening via Web Speech API...' : 'Microphone Ready (Web Speech API)'}</span>
               </div>
 
-              {/* Oral History Recording / Input Box */}
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                    Your Spoken or Written Recollection:
-                  </label>
-                  <button 
-                    className="btn-ghost" 
-                    onClick={toggleSpeechRecognition}
-                    style={{
-                      color: isListening ? '#ff5252' : 'var(--cempasuchil-gold)',
-                      fontSize: '0.82rem'
-                    }}
-                  >
-                    {isListening ? <MicOff size={14} /> : <Mic size={14} />}
-                    <span>{isListening ? 'Stop Recording' : 'Record with Mic'}</span>
-                  </button>
-                </div>
+              {/* Pulsing Mic Button */}
+              <div className="relative mb-4">
+                {isListening && (
+                  <div className="absolute -inset-4 rounded-full bg-[#be0062]/20 animate-ping pointer-events-none opacity-40"></div>
+                )}
+                <button 
+                  onClick={toggleSpeechRecognition}
+                  aria-label="Record voice memory"
+                  className={`relative w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 active:scale-95 ${
+                    isListening 
+                      ? 'bg-[#be0062] text-white shadow-[0_0_30px_rgba(190,0,98,0.6)]' 
+                      : 'bg-gradient-to-tr from-[#f59e0b] to-[#ffc174] text-[#110b1b] shadow-[0_0_24px_rgba(245,158,11,0.4)]'
+                  }`}
+                  type="button"
+                >
+                  {isListening ? <MicOff size={28} /> : <Mic size={28} />}
+                </button>
+              </div>
 
+              <p className="text-xs font-semibold text-[#fcf9f2] mb-2">
+                {isListening ? 'Speak freely about your loved one...' : 'Click to speak or type a childhood memory'}
+              </p>
+
+              {/* Topic Selector Chips */}
+              <div className="flex flex-wrap gap-1.5 justify-center mb-3">
+                {promptOptions.map((topic, i) => (
+                  <button 
+                    key={i}
+                    onClick={() => setSelectedTopic(topic)}
+                    className={`px-2.5 py-1 rounded-full text-[11px] transition-all ${
+                      selectedTopic === topic 
+                        ? 'bg-[#f59e0b] text-[#110b1b] font-bold shadow-sm' 
+                        : 'bg-[#231d2d] text-[#c9c2b5] hover:text-[#fcf9f2]'
+                    }`}
+                  >
+                    {topic}
+                  </button>
+                ))}
+              </div>
+
+              {/* Textarea Fallback */}
+              <div className="w-full text-left mt-2">
                 <textarea 
-                  rows={4}
                   value={oralTranscript}
                   onChange={e => setOralTranscript(e.target.value)}
-                  placeholder={`"I remember how ${memorial.name.split(' ')[0]} used to..."`}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    borderRadius: 8,
-                    background: '#161222',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    color: 'var(--text-primary)',
-                    fontFamily: 'inherit',
-                    fontSize: '0.9rem',
-                    resize: 'vertical'
-                  }}
+                  placeholder={`“I remember ${memorial.name} waking up early to make cinnamon coffee, whistling an old song and telling us stories by the stove...”`}
+                  className="w-full p-3 rounded-xl bg-[#110b1b] border border-[#ffc174]/20 text-xs text-[#fcf9f2] placeholder-[#a08e7a] focus:outline-none focus:border-[#f59e0b] resize-none"
+                  rows={3}
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              {/* Action Button: Weave Memory with Gemma */}
+              <div className="w-full mt-3 flex justify-end">
                 <button 
-                  className="btn-primary"
                   onClick={handleSynthesizeOralMemory}
                   disabled={isGenerating || !oralTranscript.trim()}
-                  style={{ opacity: isGenerating || !oralTranscript.trim() ? 0.6 : 1 }}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#f59e0b] to-[#ffc174] text-[#110b1b] font-bold text-xs hover:brightness-110 active:scale-95 transition-all shadow-[0_0_20px_rgba(245,158,11,0.35)] disabled:opacity-50"
+                  type="button"
                 >
-                  <Sparkles size={16} />
-                  <span>{isGenerating ? 'Synthesizing with Gemma...' : 'Weave Story with Gemma'}</span>
+                  <Sparkles size={16} className={isGenerating ? 'animate-spin' : ''} />
+                  <span>{isGenerating ? 'Synthesizing with Gemma 2B...' : 'Weave Memory with Gemma AI'}</span>
                 </button>
               </div>
+            </div>
 
-              {/* Preserved Memories List */}
-              <div style={{ marginTop: 10 }}>
-                <h4 style={{ fontSize: '0.92rem', color: 'var(--text-gold)', marginBottom: 12 }}>
-                  Preserved Memories ({memorial.oralMemories?.length || 0})
-                </h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                  {memorial.oralMemories?.map((mem) => (
-                    <div key={mem.id} className="glass-panel" style={{ padding: '16px 20px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                        <span className="badge-gold">{mem.promptTopic}</span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{mem.recordedAt}</span>
+            {/* Synthesized Stories Showcase */}
+            {memorial.oralMemories && memorial.oralMemories.length > 0 && (
+              <div className="flex flex-col gap-4">
+                <h3 className="font-serif text-sm font-bold text-[#ffc174] flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[18px]">history_edu</span>
+                  <span>Preserved Oral Capsules ({memorial.oralMemories.length})</span>
+                </h3>
+
+                {memorial.oralMemories.map(mem => (
+                  <div 
+                    key={mem.id}
+                    className="rounded-2xl bg-amber-50 text-stone-900 p-5 md:p-6 shadow-2xl relative overflow-hidden"
+                  >
+                    {/* Golden Wax Seal Emblem */}
+                    <div className="absolute -top-3 -right-3 w-20 h-20 rounded-full bg-gradient-to-br from-amber-600 via-amber-700 to-amber-900 text-amber-100 flex items-center justify-center shadow-lg transform rotate-12 opacity-95 pointer-events-none">
+                      <div className="w-16 h-16 rounded-full flex flex-col items-center justify-center text-center p-1">
+                        <span className="material-symbols-outlined text-[20px] text-amber-200">verified</span>
+                        <span className="text-[8px] uppercase tracking-tighter font-bold text-amber-100">Gemma 2B</span>
                       </div>
-                      <p style={{ fontSize: '0.9rem', lineHeight: 1.6, color: 'var(--text-primary)', fontStyle: 'italic' }}>
-                        "{mem.synthesizedStory}"
-                      </p>
-                      {mem.rawTranscript && (
-                        <div style={{ marginTop: 8, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                          Original transcript: {mem.rawTranscript}
-                        </div>
-                      )}
                     </div>
-                  ))}
-                  {(!memorial.oralMemories || memorial.oralMemories.length === 0) && (
-                    <div style={{ color: 'var(--text-muted)', fontSize: '0.86rem', textAlign: 'center', padding: 20 }}>
-                      No oral stories recorded yet. Be the first to speak a memory of {memorial.name}.
+
+                    <div className="flex items-center gap-2 text-stone-600 text-xs mb-2">
+                      <span className="font-bold text-stone-900">{mem.promptTopic}</span>
+                      <span>•</span>
+                      <span>{mem.recordedAt}</span>
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* TAB 3: CALAVERITA LITERARIA */}
-          {activeTab === 'calaverita' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-              <div 
-                style={{
-                  padding: '14px 18px',
-                  background: 'rgba(233, 30, 99, 0.1)',
-                  borderRadius: 12,
-                  border: '1px solid rgba(233, 30, 99, 0.3)'
-                }}
-              >
-                <h4 style={{ color: '#ff4081', fontSize: '0.96rem', marginBottom: 4 }}>
-                  💀 Calaverita Literaria (Memorial Verse)
-                </h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem' }}>
-                  Traditional rhyming verses written for Día de los Muertos. Humorous and affectionate stanzas where Death visits the living and departed, celebrating their passions and joy in life.
-                </p>
-              </div>
+                    <div className="font-serif text-stone-800 text-sm leading-relaxed italic space-y-2 mb-4 pr-12">
+                      <p>"{mem.synthesizedStory}"</p>
+                    </div>
 
-              {memorial.calaverita ? (
-                <div 
-                  className="glass-panel"
-                  style={{
-                    padding: '24px',
-                    border: '1px solid rgba(233, 30, 99, 0.35)',
-                    background: 'linear-gradient(135deg, rgba(233, 30, 99, 0.05), rgba(0,0,0,0.4))'
-                  }}
-                >
-                  <pre 
-                    style={{
-                      fontFamily: 'var(--font-serif-title)',
-                      fontSize: '1.02rem',
-                      lineHeight: 1.7,
-                      color: 'var(--text-primary)',
-                      whiteSpace: 'pre-wrap',
-                      margin: 0
-                    }}
-                  >
-                    {memorial.calaverita}
-                  </pre>
-                </div>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '30px 20px', color: 'var(--text-muted)' }}>
-                  No Calaverita composed yet for {memorial.name}.
-                </div>
-              )}
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-                <button 
-                  className="btn-primary" 
-                  onClick={handleGenerateCalaverita}
-                  disabled={isGenerating}
-                >
-                  <Sparkles size={16} />
-                  <span>{isGenerating ? 'Composing Verse...' : 'Generate Calaverita with Gemma'}</span>
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 4: ALTAR REMEMBRANCE LETTER */}
-          {activeTab === 'letter' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-              <div 
-                style={{
-                  padding: '14px 18px',
-                  background: 'rgba(255, 170, 0, 0.08)',
-                  borderRadius: 12,
-                  border: '1px solid rgba(255, 170, 0, 0.2)'
-                }}
-              >
-                <h4 style={{ color: 'var(--text-gold)', fontSize: '0.96rem', marginBottom: 4 }}>
-                  📜 Altar Remembrance Letter
-                </h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem' }}>
-                  A formal, poetic eulogy letter written to be placed beside their photograph and candles on November 1st and 2nd.
-                </p>
-              </div>
-
-              {memorial.remembranceLetter ? (
-                <div 
-                  className="glass-panel"
-                  style={{
-                    padding: '24px 28px',
-                    border: '1px solid rgba(255, 170, 0, 0.3)',
-                    background: 'rgba(18, 14, 25, 0.8)'
-                  }}
-                >
-                  <pre 
-                    style={{
-                      fontFamily: 'var(--font-serif-title)',
-                      fontSize: '0.96rem',
-                      lineHeight: 1.75,
-                      color: 'var(--text-primary)',
-                      whiteSpace: 'pre-wrap',
-                      margin: 0
-                    }}
-                  >
-                    {memorial.remembranceLetter}
-                  </pre>
-                </div>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '30px 20px', color: 'var(--text-muted)' }}>
-                  No remembrance letter written yet for {memorial.name}.
-                </div>
-              )}
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button 
-                  className="btn-primary" 
-                  onClick={handleGenerateLetter}
-                  disabled={isGenerating}
-                >
-                  <Sparkles size={16} />
-                  <span>{isGenerating ? 'Writing Letter...' : 'Generate Letter with Gemma'}</span>
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: ASK ANCESTOR (GHOST IN THE MACHINE) */}
-          {activeTab === 'wisdom' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-              <div 
-                style={{
-                  padding: '14px 18px',
-                  background: 'linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(0, 188, 212, 0.12))',
-                  borderRadius: 12,
-                  border: '1px solid rgba(156, 39, 176, 0.35)'
-                }}
-              >
-                <h4 style={{ color: '#e1bee7', fontSize: '0.96rem', marginBottom: 4 }}>
-                  🕯️ The Spirit of Día de los Muertos
-                </h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem' }}>
-                  "When the line between past and present feels a little thinner." Gemma channels the loving memory and philosophy of {memorial.name}, reflecting back gentle perspective based on their life, values, and favorite saying.
-                </p>
-              </div>
-
-              <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>
-                  What is on your heart today?
-                </label>
-                <textarea 
-                  rows={3}
-                  value={wisdomPrompt}
-                  onChange={e => setWisdomPrompt(e.target.value)}
-                  placeholder="Ask for guidance or share a moment you wish they were here for..."
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    borderRadius: 8,
-                    background: '#161222',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    color: 'var(--text-primary)',
-                    fontFamily: 'inherit',
-                    fontSize: '0.9rem',
-                    resize: 'vertical'
-                  }}
-                />
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button 
-                  className="btn-primary"
-                  onClick={handleChannelWisdom}
-                  disabled={isGenerating || !wisdomPrompt.trim()}
-                  style={{
-                    background: 'linear-gradient(135deg, #ab47bc 0%, #7b1fa2 100%)',
-                    borderColor: 'rgba(255,255,255,0.3)'
-                  }}
-                >
-                  <Sparkles size={16} />
-                  <span>{isGenerating ? 'Listening across time...' : 'Receive Ancestral Reflection'}</span>
-                </button>
-              </div>
-
-              {wisdomAnswer && (
-                <div 
-                  className="glass-panel-glow" 
-                  style={{
-                    padding: '24px',
-                    border: '1px solid rgba(171, 71, 188, 0.5)',
-                    background: 'rgba(24, 16, 35, 0.9)'
-                  }}
-                >
-                  <div style={{ fontSize: '0.78rem', color: '#ce93d8', fontWeight: 600, marginBottom: 8 }}>
-                    A MESSAGE FROM THE MEMORY OF {memorial.name.toUpperCase()}:
+                    <div className="pt-3 border-t border-amber-200/80 flex items-center justify-between">
+                      <button 
+                        onClick={() => handleCopyText(mem.synthesizedStory)}
+                        className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-stone-900 text-amber-50 hover:bg-stone-800 text-xs font-medium"
+                      >
+                        <Copy size={12} />
+                        <span>{copiedState ? 'Copied!' : 'Copy Prose'}</span>
+                      </button>
+                      <span className="text-[10px] text-stone-600 italic">
+                        Raw spoken transcript preserved in local JSON
+                      </span>
+                    </div>
                   </div>
-                  <pre 
-                    style={{
-                      fontFamily: 'var(--font-serif-title)',
-                      fontSize: '0.95rem',
-                      lineHeight: 1.7,
-                      color: 'var(--text-primary)',
-                      whiteSpace: 'pre-wrap',
-                      margin: 0
-                    }}
-                  >
-                    {wisdomAnswer}
-                  </pre>
-                </div>
-              )}
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ======================================================= */}
+        {/* TAB 2: CALAVERITA LITERARIA                              */}
+        {/* ======================================================= */}
+        {activeTab === 'calaverita' && (
+          <div className="p-6 md:p-8 flex flex-col gap-6 flex-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-serif text-lg font-bold text-[#ffc174]">
+                  Calaverita Literaria Studio
+                </h3>
+                <p className="text-xs text-[#c9c2b5]">
+                  Traditional Mexican rhyming quartets celebrating their humor, favorite dishes, and endearing quirks in José Guadalupe Posada's classic style.
+                </p>
+              </div>
+
+              <button 
+                onClick={handleGenerateCalaverita}
+                disabled={isGenerating}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#ffc174] to-[#f59e0b] text-[#110b1b] font-bold text-xs hover:brightness-110 shadow-md disabled:opacity-50"
+              >
+                <Sparkles size={14} className={isGenerating ? 'animate-spin' : ''} />
+                <span>{isGenerating ? 'Weaving Rhymes...' : 'Generate New Verse'}</span>
+              </button>
             </div>
-          )}
-        </div>
-      </div>
+
+            {/* Stanzas Presentation Card */}
+            <div className="relative rounded-2xl bg-gradient-to-b from-[#2a2233] via-[#241c2c] to-[#1c1525] border border-[#ffc174]/25 p-6 md:p-8 shadow-2xl overflow-hidden text-center">
+              {/* Woodcut Skull Illustration Header */}
+              <div className="flex flex-col items-center mb-4">
+                <div className="w-14 h-14 rounded-full bg-[#110b1b] border border-[#ffc174]/30 flex items-center justify-center text-2xl shadow-lg mb-2">
+                  💀
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#ffc174] font-semibold">
+                  Traditional Poetic Ofrenda
+                </span>
+                <h4 className="font-serif text-xl font-bold text-[#fcf9f2] mt-0.5">
+                  Calaverita for {memorial.name}
+                </h4>
+                <span className="text-xs text-[#ffb1c7] italic mt-0.5">
+                  Octosyllabic Mexican Folk Meter • Authored by Gemma 2B
+                </span>
+              </div>
+
+              {/* Verses */}
+              <div className="font-serif text-sm md:text-base text-[#fcf9f2] leading-loose italic my-4 whitespace-pre-line max-w-lg mx-auto">
+                {memorial.calaverita || (
+                  `Came La Catrina in formal attire,\nSeeking the house with the warmest fire;\nShe smelled the mole and tasted the sweet,\nAnd forgot to take ${memorial.name} down the street!\n\nSitting together beside the old lake,\nThey laughed at the memories love used to make;\n"Stay on this altar," La Flaca did say,\n"For in loving hearts you will forever stay!"`
+                )}
+              </div>
+
+              {/* Action Toolbar */}
+              <div className="pt-4 border-t border-[#ffc174]/15 flex items-center justify-center gap-3">
+                <button 
+                  onClick={() => handleCopyText(memorial.calaverita || '')}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#2e2738] text-xs text-[#ffc174] hover:bg-[#393243] border border-[#ffc174]/15"
+                >
+                  <Copy size={13} />
+                  <span>{copiedState ? 'Copied!' : 'Copy Verses'}</span>
+                </button>
+                <button 
+                  onClick={() => window.print()}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#2e2738] text-xs text-[#ffb1c7] hover:bg-[#393243] border border-[#ffb1c7]/15"
+                >
+                  <Printer size={13} />
+                  <span>Print as Papel Picado</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================= */}
+        {/* TAB 3: ALTAR LETTER                                     */}
+        {/* ======================================================= */}
+        {activeTab === 'letter' && (
+          <div className="p-6 md:p-8 flex flex-col gap-6 flex-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-serif text-lg font-bold text-[#ffc174]">
+                  Altar Remembrance Letter
+                </h3>
+                <p className="text-xs text-[#c9c2b5]">
+                  A sacred letter placed beside their photo on the ofrenda to be read aloud on November 1st & 2nd.
+                </p>
+              </div>
+
+              <button 
+                onClick={handleGenerateLetter}
+                disabled={isGenerating}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#ffc174] to-[#f59e0b] text-[#110b1b] font-bold text-xs hover:brightness-110 shadow-md disabled:opacity-50"
+              >
+                <Sparkles size={14} className={isGenerating ? 'animate-spin' : ''} />
+                <span>{isGenerating ? 'Composing...' : 'Compose with Gemma'}</span>
+              </button>
+            </div>
+
+            <div className="rounded-2xl bg-amber-50 text-stone-900 p-6 md:p-8 shadow-2xl relative border-4 border-amber-200/50">
+              <div className="font-serif text-lg font-bold text-amber-950 mb-3 border-b border-amber-300 pb-2">
+                Dear {memorial.name},
+              </div>
+              <div className="font-serif text-sm leading-relaxed text-stone-800 italic whitespace-pre-line">
+                {letterDraft || memorial.remembranceLetter || (
+                  `Tonight, as candles illuminate your portrait on our altar, the veil between past and present grows tenderly thin.\n\nWe poured your favorite coffee in a clay mug, sliced the orange blossom pan de muerto, and scattered golden cempasúchil petals from our front door straight to your photo frame.\n\nWe still hear your laughter echoing in the kitchen. When life feels heavy, we remember your strength, your kindness, and the love you left behind. Tonight we do not mourn; we feast, we sing, and we welcome you home.\n\nWith all our love and eternal remembrance,\nYour Family.`
+                )}
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-amber-200 flex items-center justify-between">
+                <button 
+                  onClick={() => handleCopyText(letterDraft || memorial.remembranceLetter || '')}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-stone-900 text-amber-50 text-xs font-semibold"
+                >
+                  <Copy size={13} />
+                  <span>{copiedState ? 'Copied Letter' : 'Copy Letter'}</span>
+                </button>
+                <span className="text-[11px] text-stone-600 font-serif italic">
+                  Read aloud at midnight by candlelight
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================= */}
+        {/* TAB 4: ANCESTRAL WISDOM                                  */}
+        {/* ======================================================= */}
+        {activeTab === 'wisdom' && (
+          <div className="p-6 md:p-8 flex flex-col gap-6 flex-1">
+            <div>
+              <h3 className="font-serif text-lg font-bold text-[#ffc174]">
+                Channel Ancestral Wisdom
+              </h3>
+              <p className="text-xs text-[#c9c2b5]">
+                Ask {memorial.name} for guidance or share what is on your heart. Gemma channels their voice, grounded in their favorite sayings and life memories.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#1f1929] border border-[#ffc174]/15 flex flex-col gap-3">
+              <label className="text-xs text-[#ffc174] font-semibold">
+                What would you like to ask or share with {memorial.name}?
+              </label>
+              <input 
+                type="text"
+                value={wisdomPrompt}
+                onChange={e => setWisdomPrompt(e.target.value)}
+                className="w-full p-3 rounded-lg bg-[#110b1b] border border-[#ffc174]/20 text-xs text-[#fcf9f2] focus:outline-none focus:border-[#f59e0b]"
+                placeholder="e.g. How did you stay so hopeful through hard years?"
+              />
+              <button 
+                onClick={handleChannelWisdom}
+                disabled={isGenerating || !wisdomPrompt.trim()}
+                className="self-end flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#ffc174] to-[#f59e0b] text-[#110b1b] font-bold text-xs hover:brightness-110 disabled:opacity-50"
+              >
+                <Sparkles size={14} className={isGenerating ? 'animate-spin' : ''} />
+                <span>{isGenerating ? 'Listening across the veil...' : 'Listen for Their Words'}</span>
+              </button>
+            </div>
+
+            {wisdomAnswer && (
+              <div className="p-6 rounded-2xl bg-[#2e2738] border border-[#ffc174]/30 shadow-xl flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-xs text-[#ffc174] font-bold">
+                  <span className="material-symbols-outlined text-[18px]">temp_preferences_custom</span>
+                  <span>In the Voice of {memorial.name}:</span>
+                </div>
+                <p className="font-serif text-sm md:text-base text-[#fcf9f2] leading-relaxed italic">
+                  "{wisdomAnswer}"
+                </p>
+                <div className="text-[10px] text-[#a08e7a] text-right italic">
+                  Channeled through open-weight Gemma persona conditioning
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </aside>
     </div>
   )
 }
