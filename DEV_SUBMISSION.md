@@ -2,7 +2,7 @@
 title: Ofrenda Digital: A Candlelit Día de los Muertos Sanctuary Powered 100% Offline by Open-Weight Gemma AI
 published: false
 tags: devchallenge, hf26challenge, gemma, ai
-cover_image: https://raw.githubusercontent.com/your-username/ofrenda-digital/main/preview.png
+cover_image: https://raw.githubusercontent.com/sachinn-alt/ofrenda-digital/main/preview.png
 ---
 
 *This is a submission for the [Hacktoberfest Open-Source AI Challenge Week 4: Ghost in the Machine](https://dev.to/challenges/hacktoberfest-week4-2026-10-26)*
@@ -40,7 +40,7 @@ Between October 31 (Halloween) and November 1–2 (Día de los Muertos), our cal
 - **Live Local Preview:** Runs on `http://localhost:5174/`
 - **Interactive Walkthrough Video / Screenshots:**
 
-![Ofrenda Digital Altar Preview](https://raw.githubusercontent.com/your-username/ofrenda-digital/main/preview.png)
+![Ofrenda Digital Altar Preview](https://raw.githubusercontent.com/sachinn-alt/ofrenda-digital/main/preview.png)
 
 *The candlelit 3-tier altar featuring the Marigold Arch, Doña Rosa and Don Mateo's memorial frames, traditional offerings, and procedural ambient strings.*
 
@@ -50,7 +50,7 @@ Between October 31 (Halloween) and November 1–2 (Día de los Muertos), our cal
 
 The complete source code is open-source under the MIT License:
 
-{% github your-username/ofrenda-digital %}
+{% github sachinn-alt/ofrenda-digital %}
 
 ### System Architecture
 

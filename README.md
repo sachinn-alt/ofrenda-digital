@@ -77,7 +77,7 @@ graph TD
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/ofrenda-digital.git
+git clone https://github.com/sachinn-alt/ofrenda-digital.git
 cd ofrenda-digital
 
 # Install dependencies
