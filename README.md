@@ -4,7 +4,8 @@
 > *A private, candlelit Día de los Muertos memorial & oral history preserver powered 100% locally by open-weight Google Gemma AI.*
 
 [![Open-Weight Gemma 2](https://img.shields.io/badge/Model-Gemma%202%20(2B%20%2F%209B)-blue?style=for-the-badge&logo=google)](https://ai.google.dev/gemma)
-[![Offline Sanctuary](https://img.shields.io/badge/Privacy-100%25%20Offline%20First-success?style=for-the-badge)](https://github.com)
+[![Offline Sanctuary](https://img.shields.io/badge/Privacy-100%25%20Offline%20First-success?style=for-the-badge)](https://github.com/sachinn-alt/ofrenda-digital)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sachinn-alt/ofrenda-digital)
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber?style=for-the-badge)](LICENSE)
 
 ---
@@ -88,6 +89,21 @@ npm run dev
 ```
 
 Open [http://localhost:5174](http://localhost:5174) in your browser.
+
+---
+
+## 🚀 1-Click Deploy on Render
+
+You can deploy Ofrenda Digital directly to Render's global edge network using the included [`render.yaml`](render.yaml) blueprint:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sachinn-alt/ofrenda-digital)
+
+### Manual Render Setup:
+1. Log in to [dashboard.render.com](https://dashboard.render.com) and click **New +** > **Static Site**.
+2. Connect repository `sachinn-alt/ofrenda-digital`.
+3. Set **Build Command:** `npm install && npm run build`
+4. Set **Publish Directory:** `dist`
+5. Click **Create Static Site** — Render will build and deploy your live URL in under 60 seconds!
 
 ---
 

@@ -37,6 +37,7 @@ Between October 31 (Halloween) and November 1–2 (Día de los Muertos), our cal
 
 ## Demo
 
+- **1-Click Deploy to Render:** [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sachinn-alt/ofrenda-digital)
 - **Live Local Preview:** Runs on `http://localhost:5174/`
 - **Interactive Walkthrough Video / Screenshots:**
 
@@ -83,6 +84,13 @@ Gemma was chosen because it delivers exceptional literary nuance, poetic meter, 
 - **Fail-Safe Offline Sanctuary Engine:** If Ollama is not installed or when running on machines without a local daemon, Ofrenda Digital features an embedded client-side neural synthesis engine that replicates the exact prompt schemas and traditional octosyllable rhyming rules of Mexican Calaveritas in pure JavaScript.
 - **Microphone & Speech-to-Text:** Uses the native Web Speech API to capture real-time spoken oral histories without transmitting voice audio over the wire.
 - **Web Audio Sound Synthesis:** Procedural sound generator synthesizing warm acoustic nylon guitar chords (Dm9 -> Bbmaj7 -> Gm6 -> A7) and Tibetan altar singing bowls using harmonic oscillators and biquad filters.
+
+### Edge Deployment on Render
+To make Ofrenda Digital instantly available to anyone in the world without requiring command-line installations, the project includes an automated **`render.yaml` infrastructure-as-code blueprint**. 
+- Deployed as a high-performance **Static Site** on Render's global CDN edge network.
+- Automated single-command build: `npm install && npm run build` deploying from the `./dist` artifact directory.
+- Built-in edge routing with SPA rewrite rules (`/*` -> `/index.html`) and security headers (`X-Frame-Options`, `X-Content-Type-Options`).
+- Anyone can clone or fork the repository and launch their own private altar in 60 seconds using the 1-Click "Deploy to Render" button.
 
 ---
 
@@ -139,3 +147,4 @@ In that quiet moment, looking at the glowing candle on Tier 1 and listening to t
 
 - **Grand Prize: Hacktoberfest Open-Source AI Challenge Week 4 (Ghost in the Machine)**
 - **Featured Partner Category: Best Use of Gemma** (Built directly around Google's open-weight Gemma 2 model family running locally via Ollama / open offline architecture).
+- **Featured Partner Category: Best Use of Render** (Equipped with automated `render.yaml` infrastructure-as-code blueprint, static edge deployment, custom SPA routing, and 1-Click Deploy).
