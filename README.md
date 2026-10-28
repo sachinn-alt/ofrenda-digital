@@ -3,6 +3,7 @@
 > **Hacktoberfest 2026 Open-Source AI Challenge (Week 4): *Ghost in the Machine***  
 > *A private, candlelit Día de los Muertos memorial & oral history preserver powered 100% locally by open-weight Google Gemma AI.*
 
+[![Live Demo](https://img.shields.io/badge/Live%20Sanctuary-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://ofrenda-digital.onrender.com)
 [![Open-Weight Gemma 2](https://img.shields.io/badge/Model-Gemma%202%20(2B%20%2F%209B)-blue?style=for-the-badge&logo=google)](https://ai.google.dev/gemma)
 [![Offline Sanctuary](https://img.shields.io/badge/Privacy-100%25%20Offline%20First-success?style=for-the-badge)](https://github.com/sachinn-alt/ofrenda-digital)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sachinn-alt/ofrenda-digital)

@@ -37,6 +37,7 @@ Between October 31 (Halloween) and November 1–2 (Día de los Muertos), our cal
 
 ## Demo
 
+- **Live Production App:** [https://ofrenda-digital.onrender.com](https://ofrenda-digital.onrender.com)
 - **1-Click Deploy to Render:** [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sachinn-alt/ofrenda-digital)
 - **Live Local Preview:** Runs on `http://localhost:5174/`
 - **Interactive Walkthrough Video / Screenshots:**
